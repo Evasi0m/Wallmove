@@ -2,7 +2,7 @@ import Foundation
 
 struct WallpaperItem: Identifiable, Codable, Hashable {
     let id: UUID
-    let displayName: String
+    var displayName: String
     let storedVideoFileName: String
     let storedThumbnailFileName: String?
     let importedAt: Date

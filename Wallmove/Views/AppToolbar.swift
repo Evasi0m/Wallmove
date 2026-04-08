@@ -15,7 +15,7 @@ struct AppToolbar: View {
                     .font(.system(size: 14, weight: .bold))
                     .foregroundStyle(.white)
             }
-            .padding(.leading, 76)  // leave room for traffic lights
+            .padding(.leading, 76)   // leave room for traffic lights
 
             Spacer()
 
@@ -35,9 +35,9 @@ struct AppToolbar: View {
                             .foregroundStyle(
                                 activeTab == tab
                                     ? Color.wmBackground
-                                    : Color.white.opacity(0.55)
+                                    : Color.white.opacity(0.60)
                             )
-                            .padding(.horizontal, 18)
+                            .padding(.horizontal, 16)
                             .padding(.vertical, 7)
                             .background {
                                 if activeTab == tab {
@@ -49,7 +49,7 @@ struct AppToolbar: View {
                 }
             }
             .padding(4)
-            .background(Color.white.opacity(0.09), in: Capsule())
+            .background(Color.white.opacity(0.10), in: Capsule())
 
             Spacer()
 
@@ -68,6 +68,5 @@ struct AppToolbar: View {
             .padding(.trailing, 20)
         }
         .frame(height: 52)
-        .background(Color.wmBackground)
     }
 }

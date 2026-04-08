@@ -4,13 +4,15 @@ import SwiftUI
 
 enum DashboardWindowMetrics {
     static let defaultSize = CGSize(width: 1320, height: 900)
-    static let minimumSize = CGSize(width: 1020, height: 720)
-    static let maximumSize = CGSize(width: 1600, height: 1100)
+    // Fixed-size window — min/max handled in WindowConfigurationView
+    static let minimumSize = defaultSize
+    static let maximumSize = defaultSize
 }
 
 // MARK: - Navigation
 
 enum AppTab: String, CaseIterable {
+    case home     = "Home"
     case library  = "Library"
     case settings = "Settings"
 }
@@ -19,21 +21,56 @@ enum AppTab: String, CaseIterable {
 
 struct DashboardView: View {
     @ObservedObject var viewModel: WallmoveViewModel
-    @State private var activeTab: AppTab = .library
+    @State private var activeTab: AppTab = .home
     @State private var showingPreview = false
 
     var body: some View {
-        ZStack {
+        ZStack(alignment: .top) {
             Color.wmBackground.ignoresSafeArea()
 
-            VStack(spacing: 0) {
-                AppToolbar(activeTab: $activeTab, onImport: viewModel.importWallpapers)
-
-                tabContent
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+            // ── Tab content ──────────────────────────────
+            Group {
+                switch activeTab {
+                case .home:
+                    HomeView(viewModel: viewModel, onOpenPreview: openPreview)
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                        .ignoresSafeArea()
+                case .library:
+                    VStack(spacing: 0) {
+                        Spacer().frame(height: 52)
+                        LibraryView(viewModel: viewModel, onWallpaperTap: { id in
+                            viewModel.selectWallpaper(id: id)
+                            openPreview()
+                        })
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    }
+                case .settings:
+                    VStack(spacing: 0) {
+                        Spacer().frame(height: 52)
+                        SettingsView(viewModel: viewModel)
+                            .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    }
+                }
             }
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+
+            // ── Toolbar (always on top) ───────────────────
+            AppToolbar(activeTab: $activeTab, onImport: viewModel.importWallpapers)
+                .background {
+                    if activeTab == .home {
+                        // Gradient so nav text stays readable over hero video
+                        LinearGradient(
+                            colors: [Color.black.opacity(0.60), .clear],
+                            startPoint: .top,
+                            endPoint: .bottom
+                        )
+                        .frame(height: 90)
+                    } else {
+                        Color.wmBackground
+                    }
+                }
         }
-        // Full-screen preview overlay
+        // ── Full-screen preview overlay ──────────────────
         .overlay {
             if showingPreview, viewModel.selectedWallpaper != nil {
                 WallpaperPreviewView(
@@ -50,17 +87,9 @@ struct DashboardView: View {
         })
     }
 
-    @ViewBuilder
-    private var tabContent: some View {
-        switch activeTab {
-        case .library:
-            LibraryView(viewModel: viewModel, onWallpaperTap: { id in
-                viewModel.selectWallpaper(id: id)
-                showingPreview = true
-            })
-        case .settings:
-            SettingsView(viewModel: viewModel)
-        }
+    private func openPreview() {
+        guard viewModel.selectedWallpaper != nil else { return }
+        showingPreview = true
     }
 
     private var errorIsPresented: Binding<Bool> {

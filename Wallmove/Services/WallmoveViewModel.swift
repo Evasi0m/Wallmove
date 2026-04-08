@@ -65,32 +65,6 @@ final class WallmoveViewModel: ObservableObject {
         }
     }
 
-    var lockScreenSummaryTitle: String {
-        switch screenSaverMode {
-        case .off:
-            return "No lock screen setup is prepared yet"
-        case .mirrorDesktop:
-            return "Lock screen path is prepared to mirror the desktop"
-        case .separate:
-            return "Lock screen path is prepared with a separate wallpaper"
-        }
-    }
-
-    var lockScreenSummaryDescription: String {
-        switch screenSaverMode {
-        case .off:
-            return "Pick a screen saver source first, then use System Settings to finish the lock screen flow."
-        case .mirrorDesktop:
-            return "Wallmove has prepared the same wallpaper for desktop and screen saver to keep the transition consistent."
-        case .separate:
-            return "Wallmove has prepared a dedicated screen saver wallpaper that you can use as the lock screen path."
-        }
-    }
-
-    var lockScreenCapabilityNote: String {
-        "macOS lock screen follows the screen saver path. Wallmove can prepare that wallpaper choice here, but true secure lock-screen playback still requires a dedicated ScreenSaver extension."
-    }
-
     func importWallpapers() {
         let panel = NSOpenPanel()
         panel.allowedContentTypes = [.mpeg4Movie, .movie]

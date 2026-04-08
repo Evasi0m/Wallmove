@@ -19,17 +19,24 @@ struct WindowConfigurationView: NSViewRepresentable {
     private func configureWindowIfNeeded(for view: NSView) {
         guard let window = view.window else { return }
 
-        window.setContentSize(DashboardWindowMetrics.defaultSize)
-        window.minSize = DashboardWindowMetrics.minimumSize
-        window.maxSize = DashboardWindowMetrics.maximumSize
+        let size = DashboardWindowMetrics.defaultSize
+        window.setContentSize(size)
 
-        // Full-dark, edge-to-edge look
+        // Fixed size — no resizing
+        window.minSize = size
+        window.maxSize = size
+        window.styleMask.remove(.resizable)
+
+        // Full-dark, edge-to-edge content
         window.styleMask.insert(.fullSizeContentView)
         window.titlebarAppearsTransparent = true
         window.titleVisibility = .hidden
         window.isMovableByWindowBackground = true
         window.backgroundColor = NSColor(red: 0.11, green: 0.11, blue: 0.11, alpha: 1.0)
         window.isOpaque = true
+
+        // Remove the hairline separator under the titlebar area
+        window.titlebarSeparatorStyle = .none
 
         // Disable fullscreen and zoom
         window.collectionBehavior.remove(.fullScreenPrimary)

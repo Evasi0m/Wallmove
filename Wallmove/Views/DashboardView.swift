@@ -2,26 +2,36 @@ import AVFoundation
 import SwiftUI
 
 enum DashboardWindowMetrics {
-    static let defaultSize = CGSize(width: 922, height: 677)
-    static let minimumSize = CGSize(width: 820, height: 560)
-    static let maximumSize = CGSize(width: 922, height: 677)
+    static let defaultSize = CGSize(width: 1180, height: 860)
+    static let minimumSize = CGSize(width: 920, height: 640)
+    static let maximumSize = CGSize(width: 1180, height: 860)
     static let sidebarWidth: CGFloat = 346
 }
 
 struct DashboardView: View {
     @ObservedObject var viewModel: WallmoveViewModel
+    @State private var isSidebarVisible = true
 
     var body: some View {
-        HStack(spacing: 0) {
-            sidebar
-                .frame(width: DashboardWindowMetrics.sidebarWidth)
+        VStack(spacing: 0) {
+            topBar
 
             Divider()
 
-            previewPanel
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
+            HStack(spacing: 0) {
+                if isSidebarVisible {
+                    sidebar
+                        .frame(width: DashboardWindowMetrics.sidebarWidth)
+
+                    Divider()
+                }
+
+                previewPanel
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+            }
         }
         .background(Color(nsColor: .windowBackgroundColor))
+        .animation(.easeInOut(duration: 0.18), value: isSidebarVisible)
         .alert("Wallmove Error", isPresented: errorIsPresented, actions: {
             Button("OK", role: .cancel) {
                 viewModel.errorMessage = nil
@@ -36,6 +46,26 @@ struct DashboardView: View {
             get: { viewModel.selectedWallpaperID },
             set: { viewModel.selectWallpaper(id: $0) }
         )
+    }
+
+    private var topBar: some View {
+        HStack(spacing: 10) {
+            Button {
+                isSidebarVisible.toggle()
+            } label: {
+                Image(systemName: isSidebarVisible ? "sidebar.left" : "sidebar.right")
+                    .font(.system(size: 14, weight: .semibold))
+                    .frame(width: 28, height: 28)
+            }
+            .buttonStyle(.plain)
+            .background(.quaternary.opacity(0.8), in: RoundedRectangle(cornerRadius: 8))
+            .help(isSidebarVisible ? "Hide Sidebar" : "Show Sidebar")
+
+            Spacer()
+        }
+        .padding(.horizontal, 14)
+        .padding(.vertical, 10)
+        .background(Color(nsColor: .windowBackgroundColor))
     }
 
     private var errorIsPresented: Binding<Bool> {
@@ -94,8 +124,8 @@ struct DashboardView: View {
                     .padding(18)
                     .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 20))
                 }
-                .padding(.horizontal, 22)
-                .padding(.vertical, 18)
+                .padding(.horizontal, 26)
+                .padding(.vertical, 20)
             }
             .background(Color(nsColor: .windowBackgroundColor))
         } else {
@@ -155,7 +185,7 @@ struct DashboardView: View {
         GeometryReader { geometry in
             let width = max(geometry.size.width, 1)
             let targetWidth = max(width, 320)
-            let targetHeight = min(max(targetWidth * 9 / 16, 220), 330)
+            let targetHeight = min(max(targetWidth * 9 / 16, 260), 430)
 
             LoopingVideoView(
                 playerController: viewModel.previewController,
@@ -173,7 +203,7 @@ struct DashboardView: View {
             .clipShape(RoundedRectangle(cornerRadius: 24))
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
         }
-        .frame(height: 330)
+        .frame(height: 430)
     }
 
     private var settingsCard: some View {

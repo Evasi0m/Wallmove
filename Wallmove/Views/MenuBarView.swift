@@ -57,6 +57,16 @@ struct MenuBarView: View {
             }
 
             screenSaverStatus
+
+            HStack(spacing: 6) {
+                Image(systemName: "lock.square")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                Text(viewModel.lockScreenSummaryTitle)
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                    .lineLimit(2)
+            }
         }
     }
 

@@ -22,6 +22,10 @@ struct WindowConfigurationView: NSViewRepresentable {
         window.setContentSize(DashboardWindowMetrics.defaultSize)
         window.minSize = DashboardWindowMetrics.minimumSize
         window.maxSize = DashboardWindowMetrics.maximumSize
+        window.titleVisibility = .hidden
+        window.titlebarAppearsTransparent = true
+        window.isMovableByWindowBackground = true
+        window.toolbarStyle = .unifiedCompact
         window.collectionBehavior.remove(.fullScreenPrimary)
         window.collectionBehavior.remove(.fullScreenAuxiliary)
         window.standardWindowButton(.zoomButton)?.isEnabled = false

@@ -1,43 +1,47 @@
+import AppKit
 import AVFoundation
 import SwiftUI
 import UniformTypeIdentifiers
 
 enum DashboardWindowMetrics {
-    static let defaultSize = CGSize(width: 1180, height: 860)
-    static let minimumSize = CGSize(width: 920, height: 640)
-    static let maximumSize = CGSize(width: 1440, height: 1080)
-    static let sidebarWidth: CGFloat = 346
+    static let defaultSize = CGSize(width: 1320, height: 900)
+    static let minimumSize = CGSize(width: 1020, height: 720)
+    static let maximumSize = CGSize(width: 1440, height: 1020)
+}
+
+private enum DashboardSection: String, CaseIterable, Identifiable {
+    case home = "Home"
+    case library = "Library"
+    case lockScreen = "Lock Screen"
+
+    var id: String { rawValue }
 }
 
 struct DashboardView: View {
     @ObservedObject var viewModel: WallmoveViewModel
-    @State private var isSidebarVisible = true
+    @State private var selectedSection: DashboardSection = .home
     @State private var isDragTargeted = false
     @State private var showDeleteConfirmation = false
-    @State private var isRenaming = false
-    @State private var renameText = ""
     @State private var isHoveringPreview = false
 
     var body: some View {
-        VStack(spacing: 0) {
-            topBar
+        ZStack {
+            dashboardBackground
 
-            Divider()
+            LinearGradient(
+                colors: [.black.opacity(0.15), .black.opacity(0.45)],
+                startPoint: .top,
+                endPoint: .bottom
+            )
+            .ignoresSafeArea()
 
-            HStack(spacing: 0) {
-                if isSidebarVisible {
-                    sidebar
-                        .frame(width: DashboardWindowMetrics.sidebarWidth)
-
-                    Divider()
-                }
-
-                previewPanel
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+            VStack(spacing: 24) {
+                headerBar
+                currentSectionView
             }
+            .padding(24)
         }
         .background(Color(nsColor: .windowBackgroundColor))
-        .animation(.easeInOut(duration: 0.18), value: isSidebarVisible)
         .alert("Wallmove Error", isPresented: errorIsPresented, actions: {
             Button("OK", role: .cancel) {
                 viewModel.errorMessage = nil
@@ -55,11 +59,34 @@ struct DashboardView: View {
             }
             Button("Cancel", role: .cancel) {}
         } message: {
-            Text("This will permanently remove the video file from Wallmove.")
+            Text("This removes the imported file from Wallmove storage.")
+        }
+        .onDrop(of: [.fileURL], isTargeted: $isDragTargeted) { providers in
+            handleDrop(providers)
+        }
+        .overlay {
+            if isDragTargeted {
+                RoundedRectangle(cornerRadius: 30)
+                    .strokeBorder(Color.white.opacity(0.65), lineWidth: 2)
+                    .background(
+                        RoundedRectangle(cornerRadius: 30)
+                            .fill(.ultraThinMaterial.opacity(0.55))
+                    )
+                    .padding(18)
+                    .overlay {
+                        VStack(spacing: 14) {
+                            Image(systemName: "square.and.arrow.down.on.square")
+                                .font(.system(size: 34, weight: .semibold))
+                            Text("Drop videos to import")
+                                .font(.title3.weight(.semibold))
+                            Text("Wallmove will copy `.mp4` and `.mov` files into its own library.")
+                                .foregroundStyle(.secondary)
+                        }
+                    }
+                    .transition(.opacity)
+            }
         }
     }
-
-    // MARK: - Bindings
 
     private var wallpaperSelection: Binding<UUID?> {
         Binding(
@@ -75,293 +102,568 @@ struct DashboardView: View {
         )
     }
 
-    // MARK: - Top Bar
-
-    private var topBar: some View {
-        HStack(spacing: 10) {
-            Button {
-                isSidebarVisible.toggle()
-            } label: {
-                Image(systemName: isSidebarVisible ? "sidebar.left" : "sidebar.right")
-                    .font(.system(size: 14, weight: .semibold))
-                    .frame(width: 28, height: 28)
-            }
-            .buttonStyle(.plain)
-            .glassButton(cornerRadius: 8)
-            .help(isSidebarVisible ? "Hide Sidebar" : "Show Sidebar")
-
-            Spacer()
-        }
-        .padding(.horizontal, 14)
-        .padding(.vertical, 10)
-        .background(Color(nsColor: .windowBackgroundColor))
-    }
-
-    // MARK: - Sidebar
-
-    private var sidebar: some View {
-        VStack(spacing: 0) {
-            VStack(alignment: .leading, spacing: 12) {
-                Text("Wallmove")
-                    .font(.system(size: 30, weight: .bold, design: .rounded))
-
-                Text("Minimal live wallpapers for your desktop and screen saver.")
-                    .foregroundStyle(.secondary)
-
-                HStack {
-                    Button("Import Videos", systemImage: "plus") {
-                        viewModel.importWallpapers()
-                    }
-                    .buttonStyle(.borderedProminent)
-
-                    if !viewModel.wallpapers.isEmpty {
-                        Text("\(viewModel.wallpapers.count) video\(viewModel.wallpapers.count == 1 ? "" : "s")")
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
-                    }
-                }
-            }
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .padding(.horizontal, 20)
-            .padding(.top, 18)
-            .padding(.bottom, 12)
-            .background(Color(nsColor: .windowBackgroundColor))
-
-            List(selection: wallpaperSelection) {
-                if viewModel.wallpapers.isEmpty {
-                    dropZoneEmptyState
-                        .listRowSeparator(.hidden)
-                } else {
-                    ForEach(viewModel.wallpapers) { wallpaper in
-                        WallpaperRowView(
-                            wallpaper: wallpaper,
-                            isActive: wallpaper.id == viewModel.activeWallpaperID,
-                            isScreenSaver: wallpaper.id == viewModel.screenSaverWallpaperID
-                                && viewModel.screenSaverMode == .separate
-                        )
-                        .tag(wallpaper.id)
-                    }
-                }
-            }
-            .listStyle(.sidebar)
-            .onDrop(of: [.fileURL], isTargeted: $isDragTargeted) { providers in
-                handleDrop(providers)
-            }
-            .overlay(alignment: .bottom) {
-                if isDragTargeted {
-                    dropHighlight
-                }
-            }
-        }
-        .frame(maxHeight: .infinity)
-    }
-
-    private var dropZoneEmptyState: some View {
-        VStack(spacing: 12) {
-            Image(systemName: isDragTargeted ? "film.stack.fill" : "film.stack")
-                .font(.system(size: 40))
-                .foregroundStyle(isDragTargeted ? Color.accentColor : Color.secondary)
-                .animation(.easeInOut(duration: 0.15), value: isDragTargeted)
-
-            Text(isDragTargeted ? "Drop to Import" : "No Wallpapers Yet")
-                .font(.headline)
-
-            Text("Import a `.mp4` or `.mov` file, or drop videos here to start building your library.")
-                .font(.caption)
-                .foregroundStyle(.secondary)
-                .multilineTextAlignment(.center)
-        }
-        .padding(.vertical, 20)
-        .padding(.horizontal, 8)
-        .frame(maxWidth: .infinity)
-        .contentShape(Rectangle())
-        .onDrop(of: [.fileURL], isTargeted: $isDragTargeted) { providers in
-            handleDrop(providers)
-        }
-    }
-
-    private var dropHighlight: some View {
-        RoundedRectangle(cornerRadius: 12)
-            .strokeBorder(Color.accentColor, lineWidth: 2)
-            .padding(6)
-            .transition(.opacity)
-    }
-
-    // MARK: - Preview Panel
-
-    @ViewBuilder
-    private var previewPanel: some View {
-        if let wallpaper = viewModel.selectedWallpaper {
-            ScrollView {
-                VStack(alignment: .leading, spacing: 20) {
-                    wallpaperHeader(for: wallpaper)
-
-                    previewSurface
-
-                    actionButtons
-
-                    settingsCard
-
-                    storageCard
-                }
-                .padding(.horizontal, 26)
-                .padding(.vertical, 20)
-            }
-            .background(Color(nsColor: .windowBackgroundColor))
-        } else {
-            ContentUnavailableView(
-                "Select a Wallpaper",
-                systemImage: "play.rectangle",
-                description: Text("Choose a video from the sidebar to preview it and apply it to the desktop.")
-            )
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .onDrop(of: [.fileURL], isTargeted: $isDragTargeted) { providers in
-                handleDrop(providers)
-            }
-        }
-    }
-
-    private func wallpaperHeader(for wallpaper: WallpaperItem) -> some View {
-        VStack(alignment: .leading, spacing: 6) {
-            if isRenaming {
-                HStack(spacing: 8) {
-                    TextField("Name", text: $renameText)
-                        .font(.system(size: 26, weight: .semibold, design: .rounded))
-                        .textFieldStyle(.plain)
-                        .onSubmit { commitRename(for: wallpaper) }
-
-                    Button("Done") { commitRename(for: wallpaper) }
-                        .buttonStyle(.borderedProminent)
-                        .controlSize(.small)
-
-                    Button("Cancel") { isRenaming = false }
-                        .buttonStyle(.bordered)
-                        .controlSize(.small)
-                }
+    private var dashboardBackground: some View {
+        Group {
+            if let image = currentBackgroundImage {
+                Image(nsImage: image)
+                    .resizable()
+                    .scaledToFill()
+                    .blur(radius: 36)
+                    .overlay(Color.black.opacity(0.22))
+                    .ignoresSafeArea()
             } else {
-                HStack(alignment: .center, spacing: 10) {
-                    Text(wallpaper.displayName)
-                        .font(.system(size: 26, weight: .semibold, design: .rounded))
-
-                    Button {
-                        renameText = wallpaper.displayName
-                        isRenaming = true
-                    } label: {
-                        Image(systemName: "pencil")
-                            .font(.system(size: 13, weight: .medium))
-                            .foregroundStyle(.secondary)
-                    }
-                    .buttonStyle(.plain)
-                    .help("Rename")
-
-                    if wallpaper.id == viewModel.activeWallpaperID {
-                        Label("Active", systemImage: "checkmark.circle.fill")
-                            .font(.caption.weight(.semibold))
-                            .foregroundStyle(.green)
-                            .padding(.horizontal, 8)
-                            .padding(.vertical, 3)
-                            .glassCapsule(color: .green)
-                    }
-                }
-            }
-
-            Text("Choose how this clip behaves on the desktop and in screen saver mode.")
-                .foregroundStyle(.secondary)
-        }
-        .onChange(of: viewModel.selectedWallpaperID) { _ in
-            isRenaming = false
-        }
-    }
-
-    private func commitRename(for wallpaper: WallpaperItem) {
-        viewModel.renameWallpaper(id: wallpaper.id, to: renameText)
-        isRenaming = false
-    }
-
-    // MARK: - Preview Surface
-
-    private var previewSurface: some View {
-        GeometryReader { geometry in
-            let width = max(geometry.size.width, 1)
-            let targetWidth = max(width, 320)
-            let targetHeight = min(max(targetWidth * 9 / 16, 260), 430)
-
-            ZStack {
-                LoopingVideoView(
-                    playerController: viewModel.previewController,
-                    videoGravity: .resizeAspectFill
-                )
-
-                playPauseOverlay
-            }
-            .frame(width: targetWidth, height: targetHeight)
-            .background(
                 LinearGradient(
-                    colors: [.black.opacity(0.95), .black.opacity(0.78)],
+                    colors: [
+                        Color(red: 0.17, green: 0.22, blue: 0.29),
+                        Color(red: 0.10, green: 0.12, blue: 0.17)
+                    ],
                     startPoint: .topLeading,
                     endPoint: .bottomTrailing
-                ),
-                in: RoundedRectangle(cornerRadius: 24)
-            )
-            .clipShape(RoundedRectangle(cornerRadius: 24))
-            .overlay(
-                RoundedRectangle(cornerRadius: 24)
-                    .strokeBorder(
-                        LinearGradient(
-                            colors: [.white.opacity(0.25), .white.opacity(0.05)],
-                            startPoint: .topLeading,
-                            endPoint: .bottomTrailing
-                        ),
-                        lineWidth: 1
-                    )
-            )
-            .onHover { hovering in
-                withAnimation(.easeInOut(duration: 0.15)) {
-                    isHoveringPreview = hovering
+                )
+                .ignoresSafeArea()
+            }
+        }
+    }
+
+    private var headerBar: some View {
+        HStack(spacing: 20) {
+            HStack(spacing: 14) {
+                RoundedRectangle(cornerRadius: 14)
+                    .fill(.ultraThinMaterial)
+                    .frame(width: 48, height: 48)
+                    .overlay {
+                        Image(systemName: "play.rectangle.on.rectangle.fill")
+                            .font(.title3.weight(.semibold))
+                    }
+
+                VStack(alignment: .leading, spacing: 3) {
+                    Text("Wallmove")
+                        .font(.system(size: 26, weight: .bold, design: .rounded))
+
+                    Text("Live wallpapers for desktop, screen saver, and lock screen setup.")
+                        .font(.subheadline)
+                        .foregroundStyle(.secondary)
                 }
             }
-            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+
+            Spacer()
+
+            HStack(spacing: 8) {
+                ForEach(DashboardSection.allCases) { section in
+                    Button {
+                        selectedSection = section
+                    } label: {
+                        Text(section.rawValue)
+                            .font(.headline)
+                            .foregroundStyle(selectedSection == section ? .black : .white.opacity(0.92))
+                            .padding(.horizontal, 22)
+                            .padding(.vertical, 12)
+                            .background(
+                                Capsule()
+                                    .fill(selectedSection == section ? Color.white : Color.clear)
+                            )
+                    }
+                    .buttonStyle(.plain)
+                }
+            }
+            .padding(6)
+            .glassCard(cornerRadius: 26)
+
+            Spacer()
+
+            HStack(spacing: 12) {
+                Button("Import", systemImage: "square.and.arrow.up") {
+                    viewModel.importWallpapers()
+                }
+                .buttonStyle(.plain)
+                .padding(.horizontal, 20)
+                .padding(.vertical, 14)
+                .glassButton(cornerRadius: 22)
+
+                Menu {
+                    Toggle(
+                        "Launch at Login",
+                        isOn: Binding(
+                            get: { viewModel.launchAtLoginEnabled },
+                            set: { viewModel.setLaunchAtLoginEnabled($0) }
+                        )
+                    )
+
+                    Divider()
+
+                    Button("Open System Settings") {
+                        viewModel.openSystemSettings()
+                    }
+
+                    Button("Clear Imported Cache", role: .destructive) {
+                        viewModel.clearCache()
+                    }
+                } label: {
+                    Image(systemName: "gearshape.fill")
+                        .font(.headline)
+                        .frame(width: 54, height: 54)
+                        .glassButton(cornerRadius: 27)
+                }
+                .menuStyle(.borderlessButton)
+            }
         }
-        .frame(height: 430)
     }
 
-    private var playPauseOverlay: some View {
-        Button {
-            viewModel.togglePreviewPlayback()
-        } label: {
-            Image(systemName: viewModel.isPreviewPaused ? "play.circle.fill" : "pause.circle.fill")
-                .font(.system(size: 42))
-                .foregroundStyle(.white.opacity(0.85))
-                .shadow(color: .black.opacity(0.4), radius: 8, x: 0, y: 2)
+    @ViewBuilder
+    private var currentSectionView: some View {
+        switch selectedSection {
+        case .home:
+            homeSection
+        case .library:
+            librarySection
+        case .lockScreen:
+            lockScreenSection
         }
-        .buttonStyle(.plain)
-        .opacity(viewModel.isPreviewPaused || isHoveringPreview ? 1 : 0)
-        .animation(.easeInOut(duration: 0.15), value: isHoveringPreview)
-        .contentShape(Rectangle())
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
 
-    // MARK: - Action Buttons
+    private var homeSection: some View {
+        ScrollView {
+            VStack(spacing: 22) {
+                if let wallpaper = viewModel.selectedWallpaper {
+                    heroPreview(for: wallpaper)
 
-    private var actionButtons: some View {
-        HStack(spacing: 12) {
-            Button("Apply to Desktop") {
+                    HStack(alignment: .top, spacing: 18) {
+                        quickStatusCard
+                        screenSaverCard
+                        lockScreenCard
+                    }
+                } else {
+                    emptyHero
+                }
+            }
+            .padding(.bottom, 12)
+        }
+        .scrollIndicators(.hidden)
+    }
+
+    private func heroPreview(for wallpaper: WallpaperItem) -> some View {
+        ZStack(alignment: .bottomLeading) {
+            LoopingVideoView(
+                playerController: viewModel.previewController,
+                videoGravity: .resizeAspectFill
+            )
+            .overlay {
+                LinearGradient(
+                    colors: [.clear, .black.opacity(0.82)],
+                    startPoint: .top,
+                    endPoint: .bottom
+                )
+            }
+
+            VStack(alignment: .leading, spacing: 18) {
+                Spacer()
+
+                VStack(alignment: .leading, spacing: 10) {
+                    Text("FEATURED")
+                        .font(.subheadline.weight(.bold))
+                        .tracking(3)
+                        .foregroundStyle(.white.opacity(0.85))
+
+                    Text(wallpaper.displayName)
+                        .font(.system(size: 48, weight: .bold, design: .rounded))
+                        .foregroundStyle(.white)
+
+                    HStack(spacing: 10) {
+                        heroBadge(viewModel.activeWallpaperID == wallpaper.id ? "Desktop Active" : "Ready", tint: .white)
+                        heroBadge(viewModel.screenSaverWallpaperID == wallpaper.id || viewModel.screenSaverMode == .mirrorDesktop ? "Screen Saver" : "Library", tint: .blue)
+                        heroBadge(viewModel.cacheSize, tint: .white)
+                    }
+                }
+
+                HStack(spacing: 12) {
+                    Button("Apply to Desktop") {
+                        viewModel.applySelectedWallpaper()
+                    }
+                    .buttonStyle(.plain)
+                    .padding(.horizontal, 22)
+                    .padding(.vertical, 14)
+                    .background(Color.white, in: Capsule())
+                    .foregroundStyle(.black)
+
+                    Button("Open Lock Screen Setup") {
+                        selectedSection = .lockScreen
+                    }
+                    .buttonStyle(.plain)
+                    .padding(.horizontal, 22)
+                    .padding(.vertical, 14)
+                    .glassButton(cornerRadius: 22)
+
+                    Button {
+                        viewModel.togglePreviewPlayback()
+                    } label: {
+                        Image(systemName: viewModel.isPreviewPaused ? "play.fill" : "pause.fill")
+                            .font(.headline)
+                            .frame(width: 48, height: 48)
+                            .glassButton(cornerRadius: 24)
+                    }
+                    .buttonStyle(.plain)
+                }
+            }
+            .padding(36)
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottomLeading)
+
+            VStack {
+                Spacer()
+                wallpaperStrip
+                    .padding(.horizontal, 26)
+                    .padding(.bottom, 22)
+            }
+        }
+        .frame(height: 520)
+        .clipShape(RoundedRectangle(cornerRadius: 34))
+        .overlay {
+            RoundedRectangle(cornerRadius: 34)
+                .strokeBorder(
+                    LinearGradient(
+                        colors: [.white.opacity(0.46), .white.opacity(0.08)],
+                        startPoint: .topLeading,
+                        endPoint: .bottomTrailing
+                    ),
+                    lineWidth: 1
+                )
+        }
+        .shadow(color: .black.opacity(0.22), radius: 24, x: 0, y: 18)
+        .onHover { hovering in
+            withAnimation(.easeInOut(duration: 0.16)) {
+                isHoveringPreview = hovering
+            }
+        }
+    }
+
+    private func heroBadge(_ title: String, tint: Color) -> some View {
+        Text(title)
+            .font(.subheadline.weight(.semibold))
+            .padding(.horizontal, 12)
+            .padding(.vertical, 7)
+            .foregroundStyle(.white)
+            .background(
+                Capsule()
+                    .fill(.ultraThinMaterial.opacity(0.9))
+                    .overlay(
+                        Capsule().strokeBorder(tint.opacity(0.45), lineWidth: 0.8)
+                    )
+            )
+    }
+
+    private var wallpaperStrip: some View {
+        ScrollView(.horizontal, showsIndicators: false) {
+            HStack(spacing: 14) {
+                ForEach(viewModel.wallpapers) { wallpaper in
+                    Button {
+                        viewModel.selectWallpaper(id: wallpaper.id)
+                    } label: {
+                        wallpaperThumbnail(for: wallpaper)
+                            .frame(width: 168, height: 96)
+                            .clipShape(RoundedRectangle(cornerRadius: 24))
+                            .overlay {
+                                RoundedRectangle(cornerRadius: 24)
+                                    .strokeBorder(
+                                        wallpaper.id == viewModel.selectedWallpaperID ? .white.opacity(0.95) : .white.opacity(0.14),
+                                        lineWidth: wallpaper.id == viewModel.selectedWallpaperID ? 3 : 1
+                                    )
+                            }
+                            .shadow(color: .black.opacity(0.28), radius: 18, x: 0, y: 12)
+                    }
+                    .buttonStyle(.plain)
+                }
+            }
+        }
+    }
+
+    private var quickStatusCard: some View {
+        VStack(alignment: .leading, spacing: 14) {
+            Label("Desktop", systemImage: "display")
+                .font(.headline)
+
+            Text(viewModel.activeWallpaper?.displayName ?? "No desktop wallpaper applied yet.")
+                .font(.title3.weight(.semibold))
+
+            Text("Choose a clip from the library strip, preview it instantly, then push it to the desktop in one click.")
+                .foregroundStyle(.secondary)
+
+            Button("Apply Selected Wallpaper") {
                 viewModel.applySelectedWallpaper()
             }
             .buttonStyle(.borderedProminent)
-
-            Button("Delete") {
-                showDeleteConfirmation = true
-            }
-            .buttonStyle(.bordered)
         }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(20)
+        .glassCard(cornerRadius: 24)
     }
 
-    // MARK: - Settings Card
+    private var screenSaverCard: some View {
+        VStack(alignment: .leading, spacing: 14) {
+            Label("Screen Saver", systemImage: "sparkles.rectangle.stack")
+                .font(.headline)
 
-    private var settingsCard: some View {
+            Text(viewModel.screenSaverSummaryTitle)
+                .font(.title3.weight(.semibold))
+
+            Text(viewModel.screenSaverSummaryDescription)
+                .foregroundStyle(.secondary)
+
+            HStack(spacing: 10) {
+                Button("Match Desktop") {
+                    viewModel.configureScreenSaverToMirrorDesktop()
+                }
+                .buttonStyle(.borderedProminent)
+
+                Button("Use Selected") {
+                    viewModel.configureScreenSaverWithSelectedWallpaper()
+                }
+                .buttonStyle(.bordered)
+            }
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(20)
+        .glassCard(cornerRadius: 24)
+    }
+
+    private var lockScreenCard: some View {
+        VStack(alignment: .leading, spacing: 14) {
+            Label("Lock Screen", systemImage: "lock.square.stack")
+                .font(.headline)
+
+            Text(viewModel.lockScreenSummaryTitle)
+                .font(.title3.weight(.semibold))
+
+            Text(viewModel.lockScreenSummaryDescription)
+                .foregroundStyle(.secondary)
+
+            HStack(spacing: 10) {
+                Button("Setup") {
+                    selectedSection = .lockScreen
+                }
+                .buttonStyle(.borderedProminent)
+
+                Button("System Settings") {
+                    viewModel.openSystemSettings()
+                }
+                .buttonStyle(.bordered)
+            }
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(20)
+        .glassCard(cornerRadius: 24)
+    }
+
+    private var librarySection: some View {
+        ScrollView {
+            VStack(alignment: .leading, spacing: 22) {
+                sectionHeading(
+                    eyebrow: "LIBRARY",
+                    title: "Manage your imported wallpapers",
+                    subtitle: "Browse your local clips, change the active wallpaper, and keep the library clean."
+                )
+
+                if viewModel.wallpapers.isEmpty {
+                    emptyLibraryState
+                } else {
+                    LazyVGrid(
+                        columns: [GridItem(.adaptive(minimum: 270, maximum: 320), spacing: 18)],
+                        spacing: 18
+                    ) {
+                        ForEach(viewModel.wallpapers) { wallpaper in
+                            libraryTile(for: wallpaper)
+                        }
+                    }
+                }
+            }
+            .padding(.bottom, 20)
+        }
+        .scrollIndicators(.hidden)
+    }
+
+    private func libraryTile(for wallpaper: WallpaperItem) -> some View {
+        VStack(alignment: .leading, spacing: 12) {
+            Button {
+                viewModel.selectWallpaper(id: wallpaper.id)
+                selectedSection = .home
+            } label: {
+                ZStack(alignment: .bottomLeading) {
+                    wallpaperThumbnail(for: wallpaper)
+                        .frame(height: 180)
+                        .clipShape(RoundedRectangle(cornerRadius: 22))
+
+                    LinearGradient(
+                        colors: [.clear, .black.opacity(0.72)],
+                        startPoint: .top,
+                        endPoint: .bottom
+                    )
+                    .clipShape(RoundedRectangle(cornerRadius: 22))
+
+                    VStack(alignment: .leading, spacing: 6) {
+                        Text(wallpaper.displayName)
+                            .font(.headline)
+                            .foregroundStyle(.white)
+                            .lineLimit(1)
+
+                        HStack(spacing: 8) {
+                            if viewModel.activeWallpaperID == wallpaper.id {
+                                tileBadge("Desktop", color: .green)
+                            }
+
+                            if viewModel.screenSaverMode == .separate && viewModel.screenSaverWallpaperID == wallpaper.id {
+                                tileBadge("Screen Saver", color: .blue)
+                            }
+                        }
+                    }
+                    .padding(16)
+                }
+            }
+            .buttonStyle(.plain)
+
+            Text(wallpaper.videoFileName)
+                .font(.caption)
+                .foregroundStyle(.secondary)
+                .lineLimit(1)
+
+            HStack(spacing: 10) {
+                Button("Preview") {
+                    viewModel.selectWallpaper(id: wallpaper.id)
+                    selectedSection = .home
+                }
+                .buttonStyle(.borderedProminent)
+
+                Button("Delete", role: .destructive) {
+                    viewModel.selectWallpaper(id: wallpaper.id)
+                    showDeleteConfirmation = true
+                }
+                .buttonStyle(.bordered)
+            }
+        }
+        .padding(16)
+        .glassCard(cornerRadius: 24)
+    }
+
+    private func tileBadge(_ title: String, color: Color) -> some View {
+        Text(title)
+            .font(.caption.weight(.semibold))
+            .padding(.horizontal, 10)
+            .padding(.vertical, 4)
+            .glassCapsule(color: color)
+    }
+
+    private var lockScreenSection: some View {
+        ScrollView {
+            VStack(alignment: .leading, spacing: 22) {
+                sectionHeading(
+                    eyebrow: "LOCK SCREEN",
+                    title: "Prepare your screen saver and lock screen flow",
+                    subtitle: "macOS lock screen follows the screen saver path. Wallmove lets you decide which wallpaper should represent that experience."
+                )
+
+                HStack(alignment: .top, spacing: 18) {
+                    lockScreenSetupPanel
+                    lockScreenInfoPanel
+                }
+
+                generalSettingsPanel
+            }
+            .padding(.bottom, 20)
+        }
+        .scrollIndicators(.hidden)
+    }
+
+    private var lockScreenSetupPanel: some View {
         VStack(alignment: .leading, spacing: 18) {
-            VStack(alignment: .leading, spacing: 8) {
+            Text("Choose a lock screen source")
+                .font(.title3.weight(.semibold))
+
+            Picker("Lock Screen Source", selection: $viewModel.selectedScreenSaverMode) {
+                ForEach(WallpaperLibrary.ScreenSaverMode.allCases) { mode in
+                    Text(mode.title).tag(mode)
+                }
+            }
+            .pickerStyle(.segmented)
+
+            if viewModel.selectedScreenSaverMode == .separate {
+                VStack(alignment: .leading, spacing: 12) {
+                    Text("Wallpaper")
+                        .font(.headline)
+
+                    ScrollView(.horizontal, showsIndicators: false) {
+                        HStack(spacing: 12) {
+                            ForEach(viewModel.wallpapers) { wallpaper in
+                                Button {
+                                    viewModel.selectedScreenSaverWallpaperID = wallpaper.id
+                                } label: {
+                                    wallpaperThumbnail(for: wallpaper)
+                                        .frame(width: 150, height: 88)
+                                        .clipShape(RoundedRectangle(cornerRadius: 18))
+                                        .overlay {
+                                            RoundedRectangle(cornerRadius: 18)
+                                                .strokeBorder(
+                                                    viewModel.selectedScreenSaverWallpaperID == wallpaper.id ? .white.opacity(0.92) : .white.opacity(0.14),
+                                                    lineWidth: viewModel.selectedScreenSaverWallpaperID == wallpaper.id ? 3 : 1
+                                                )
+                                        }
+                                }
+                                .buttonStyle(.plain)
+                            }
+                        }
+                    }
+                }
+            }
+
+            HStack(spacing: 12) {
+                Button("Apply Lock Screen Setup") {
+                    viewModel.applyScreenSaverSettings()
+                }
+                .buttonStyle(.borderedProminent)
+
+                Button("Open System Settings") {
+                    viewModel.openSystemSettings()
+                }
+                .buttonStyle(.bordered)
+            }
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(22)
+        .glassCard(cornerRadius: 26)
+    }
+
+    private var lockScreenInfoPanel: some View {
+        VStack(alignment: .leading, spacing: 16) {
+            Text("What this controls")
+                .font(.title3.weight(.semibold))
+
+            VStack(alignment: .leading, spacing: 10) {
+                infoRow(title: "Current setup", detail: viewModel.lockScreenSummaryTitle)
+                infoRow(title: "Active wallpaper", detail: viewModel.activeWallpaper?.displayName ?? "None")
+                infoRow(title: "Selected screen saver", detail: viewModel.screenSaverWallpaper?.displayName ?? "Follows desktop")
+            }
+
+            Divider()
+
+            Text(viewModel.lockScreenCapabilityNote)
+                .foregroundStyle(.secondary)
+
+            Button("Mirror Desktop Wallpaper") {
+                viewModel.configureScreenSaverToMirrorDesktop()
+            }
+            .buttonStyle(.bordered)
+
+            if viewModel.selectedWallpaper != nil {
+                Button("Use Selected Wallpaper") {
+                    viewModel.configureScreenSaverWithSelectedWallpaper()
+                }
+                .buttonStyle(.bordered)
+            }
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(22)
+        .glassCard(cornerRadius: 26)
+    }
+
+    private var generalSettingsPanel: some View {
+        HStack(alignment: .top, spacing: 18) {
+            VStack(alignment: .leading, spacing: 14) {
                 Text("Playback")
                     .font(.headline)
 
@@ -377,73 +679,140 @@ struct DashboardView: View {
                     .font(.footnote)
                     .foregroundStyle(.secondary)
             }
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding(22)
+            .glassCard(cornerRadius: 24)
 
-            Divider()
-
-            VStack(alignment: .leading, spacing: 10) {
-                Text("Screen Saver")
+            VStack(alignment: .leading, spacing: 14) {
+                Text("Storage")
                     .font(.headline)
 
-                Picker("Screen Saver", selection: $viewModel.selectedScreenSaverMode) {
-                    ForEach(WallpaperLibrary.ScreenSaverMode.allCases) { mode in
-                        Text(mode.title).tag(mode)
-                    }
-                }
-                .pickerStyle(.segmented)
+                Text("Current cache: \(viewModel.cacheSize)")
+                    .font(.title3.weight(.semibold))
 
-                if viewModel.selectedScreenSaverMode == .separate {
-                    Picker("Wallpaper", selection: Binding(
-                        get: { viewModel.selectedScreenSaverWallpaperID },
-                        set: { viewModel.selectedScreenSaverWallpaperID = $0 }
-                    )) {
-                        ForEach(viewModel.wallpapers) { wallpaper in
-                            Text(wallpaper.displayName).tag(Optional(wallpaper.id))
-                        }
-                    }
-                }
+                Text("Wallmove stores imported clips inside Application Support so deleting the source file never breaks your setup.")
+                    .foregroundStyle(.secondary)
 
-                Button("Apply Screen Saver Settings") {
-                    viewModel.applyScreenSaverSettings()
+                Button("Clear Imported Cache", role: .destructive) {
+                    viewModel.clearCache()
+                }
+                .buttonStyle(.bordered)
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding(22)
+            .glassCard(cornerRadius: 24)
+        }
+    }
+
+    private func sectionHeading(eyebrow: String, title: String, subtitle: String) -> some View {
+        VStack(alignment: .leading, spacing: 10) {
+            Text(eyebrow)
+                .font(.subheadline.weight(.bold))
+                .tracking(3)
+                .foregroundStyle(.white.opacity(0.78))
+
+            Text(title)
+                .font(.system(size: 34, weight: .bold, design: .rounded))
+
+            Text(subtitle)
+                .font(.headline)
+                .foregroundStyle(.secondary)
+        }
+    }
+
+    private var emptyHero: some View {
+        VStack(alignment: .leading, spacing: 18) {
+            sectionHeading(
+                eyebrow: "WELCOME",
+                title: "Bring your desktop to life",
+                subtitle: "Import a short `.mp4` or `.mov` clip, preview it instantly, and then decide how it should behave on desktop, screen saver, and lock screen setup."
+            )
+
+            HStack(spacing: 12) {
+                Button("Import Videos", systemImage: "square.and.arrow.up") {
+                    viewModel.importWallpapers()
+                }
+                .buttonStyle(.borderedProminent)
+
+                Button("Open Lock Screen Setup") {
+                    selectedSection = .lockScreen
                 }
                 .buttonStyle(.bordered)
             }
         }
-        .padding(18)
-        .glassCard(cornerRadius: 20)
+        .frame(maxWidth: .infinity, minHeight: 420, alignment: .leading)
+        .padding(28)
+        .glassCard(cornerRadius: 34)
     }
 
-    // MARK: - Storage Card
+    private var emptyLibraryState: some View {
+        VStack(spacing: 16) {
+            Image(systemName: "film.stack.fill")
+                .font(.system(size: 40))
 
-    private var storageCard: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            HStack {
-                Text("Storage")
-                    .font(.headline)
+            Text("Your library is empty")
+                .font(.title3.weight(.semibold))
 
-                Spacer()
-
-                Text(viewModel.cacheSize)
-                    .font(.caption.weight(.semibold))
-                    .foregroundStyle(.secondary)
-                    .padding(.horizontal, 8)
-                    .padding(.vertical, 3)
-                    .glassCapsule(color: .secondary)
-            }
-
-            Text("Imported videos are copied into `~/Library/Application Support/Wallmove/Wallpapers/`, so deleting the original file will not break Wallmove.")
-                .font(.footnote)
+            Text("Import a few videos to start building a more cinematic dashboard.")
                 .foregroundStyle(.secondary)
+                .multilineTextAlignment(.center)
 
-            Button("Clear Imported Cache") {
-                viewModel.clearCache()
+            Button("Import Videos") {
+                viewModel.importWallpapers()
             }
-            .buttonStyle(.bordered)
+            .buttonStyle(.borderedProminent)
         }
-        .padding(18)
-        .glassCard(cornerRadius: 20)
+        .frame(maxWidth: .infinity, minHeight: 280)
+        .padding(24)
+        .glassCard(cornerRadius: 28)
     }
 
-    // MARK: - Drag & Drop
+    private func infoRow(title: String, detail: String) -> some View {
+        VStack(alignment: .leading, spacing: 4) {
+            Text(title)
+                .font(.caption.weight(.semibold))
+                .foregroundStyle(.secondary)
+            Text(detail)
+                .font(.headline)
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+    }
+
+    @ViewBuilder
+    private func wallpaperThumbnail(for wallpaper: WallpaperItem) -> some View {
+        if let image = thumbnailImage(for: wallpaper) {
+            Image(nsImage: image)
+                .resizable()
+                .scaledToFill()
+        } else {
+            LinearGradient(
+                colors: [.white.opacity(0.16), .white.opacity(0.04)],
+                startPoint: .topLeading,
+                endPoint: .bottomTrailing
+            )
+            .overlay {
+                Image(systemName: "film")
+                    .font(.title3)
+                    .foregroundStyle(.secondary)
+            }
+        }
+    }
+
+    private var currentBackgroundImage: NSImage? {
+        guard let wallpaper = viewModel.selectedWallpaper ?? viewModel.activeWallpaper else {
+            return nil
+        }
+
+        return thumbnailImage(for: wallpaper)
+    }
+
+    private func thumbnailImage(for wallpaper: WallpaperItem) -> NSImage? {
+        guard let url = wallpaper.thumbnailURL(in: AppDirectories.thumbnails) else {
+            return nil
+        }
+
+        return NSImage(contentsOf: url)
+    }
 
     @discardableResult
     private func handleDrop(_ providers: [NSItemProvider]) -> Bool {
@@ -455,12 +824,12 @@ struct DashboardView: View {
                 let ext = url.pathExtension.lowercased()
                 guard ["mp4", "mov"].contains(ext) else { return }
                 DispatchQueue.main.async {
-                    self.viewModel.importDroppedURLs([url])
+                    viewModel.importDroppedURLs([url])
                 }
                 handled = true
             }
         }
-        return true
+        return handled
     }
 }
 

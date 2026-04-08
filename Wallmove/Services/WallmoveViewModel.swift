@@ -43,6 +43,54 @@ final class WallmoveViewModel: ObservableObject {
         wallpapers.first(where: { $0.id == screenSaverWallpaperID })
     }
 
+    var screenSaverSummaryTitle: String {
+        switch screenSaverMode {
+        case .off:
+            return "Screen saver is currently off"
+        case .mirrorDesktop:
+            return "Screen saver matches the desktop wallpaper"
+        case .separate:
+            return screenSaverWallpaper?.displayName ?? "A separate screen saver wallpaper is selected"
+        }
+    }
+
+    var screenSaverSummaryDescription: String {
+        switch screenSaverMode {
+        case .off:
+            return "Turn it on if you want Wallmove to keep the same mood when your Mac goes idle."
+        case .mirrorDesktop:
+            return "Your selected desktop wallpaper is also being used for the screen saver flow."
+        case .separate:
+            return "Use a different clip for the screen saver without changing the live desktop wallpaper."
+        }
+    }
+
+    var lockScreenSummaryTitle: String {
+        switch screenSaverMode {
+        case .off:
+            return "No lock screen setup is prepared yet"
+        case .mirrorDesktop:
+            return "Lock screen path is prepared to mirror the desktop"
+        case .separate:
+            return "Lock screen path is prepared with a separate wallpaper"
+        }
+    }
+
+    var lockScreenSummaryDescription: String {
+        switch screenSaverMode {
+        case .off:
+            return "Pick a screen saver source first, then use System Settings to finish the lock screen flow."
+        case .mirrorDesktop:
+            return "Wallmove has prepared the same wallpaper for desktop and screen saver to keep the transition consistent."
+        case .separate:
+            return "Wallmove has prepared a dedicated screen saver wallpaper that you can use as the lock screen path."
+        }
+    }
+
+    var lockScreenCapabilityNote: String {
+        "macOS lock screen follows the screen saver path. Wallmove can prepare that wallpaper choice here, but true secure lock-screen playback still requires a dedicated ScreenSaver extension."
+    }
+
     func importWallpapers() {
         let panel = NSOpenPanel()
         panel.allowedContentTypes = [.mpeg4Movie, .movie]
@@ -129,6 +177,23 @@ final class WallmoveViewModel: ObservableObject {
         } catch {
             errorMessage = error.localizedDescription
         }
+    }
+
+    func configureScreenSaverToMirrorDesktop() {
+        selectedScreenSaverMode = .mirrorDesktop
+        selectedScreenSaverWallpaperID = nil
+        applyScreenSaverSettings()
+    }
+
+    func configureScreenSaverWithSelectedWallpaper() {
+        selectedScreenSaverMode = .separate
+        selectedScreenSaverWallpaperID = selectedWallpaperID ?? activeWallpaperID
+        applyScreenSaverSettings()
+    }
+
+    func openSystemSettings() {
+        let settingsURL = URL(fileURLWithPath: "/System/Applications/System Settings.app")
+        NSWorkspace.shared.open(settingsURL)
     }
 
     func renameWallpaper(id: UUID, to newName: String) {

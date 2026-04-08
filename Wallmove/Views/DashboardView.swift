@@ -46,7 +46,7 @@ struct DashboardView: View {
             Text(viewModel.errorMessage ?? "")
         })
         .confirmationDialog(
-            "Delete "\(viewModel.selectedWallpaper?.displayName ?? "")"?",
+            "Delete \"\(viewModel.selectedWallpaper?.displayName ?? "")\"?",
             isPresented: $showDeleteConfirmation,
             titleVisibility: .visible
         ) {
@@ -160,7 +160,7 @@ struct DashboardView: View {
         VStack(spacing: 12) {
             Image(systemName: isDragTargeted ? "film.stack.fill" : "film.stack")
                 .font(.system(size: 40))
-                .foregroundStyle(isDragTargeted ? .accent : .secondary)
+                .foregroundStyle(isDragTargeted ? Color.accentColor : Color.secondary)
                 .animation(.easeInOut(duration: 0.15), value: isDragTargeted)
 
             Text(isDragTargeted ? "Drop to Import" : "No Wallpapers Yet")
@@ -182,7 +182,7 @@ struct DashboardView: View {
 
     private var dropHighlight: some View {
         RoundedRectangle(cornerRadius: 12)
-            .strokeBorder(.accent, lineWidth: 2)
+            .strokeBorder(Color.accentColor, lineWidth: 2)
             .padding(6)
             .transition(.opacity)
     }

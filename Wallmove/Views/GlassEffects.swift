@@ -1,5 +1,36 @@
 import SwiftUI
 
+// MARK: - App Color Palette
+
+extension Color {
+    /// Primary window background — very dark charcoal
+    static let wmBackground = Color(red: 0.11, green: 0.11, blue: 0.11)
+    /// Slightly elevated surface (cards, rows)
+    static let wmSurface = Color(red: 0.17, green: 0.17, blue: 0.17)
+    /// Hover / pressed state
+    static let wmSurfaceHover = Color(red: 0.22, green: 0.22, blue: 0.22)
+    /// Subtle border
+    static let wmBorder = Color.white.opacity(0.10)
+    /// Primary text
+    static let wmText = Color.white
+    /// Secondary text
+    static let wmTextSecondary = Color.white.opacity(0.45)
+}
+
+// MARK: - Primary Button Style
+
+struct WallmovePrimaryButtonStyle: ButtonStyle {
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .font(.system(size: 14, weight: .semibold))
+            .foregroundStyle(Color.black)
+            .padding(.horizontal, 20)
+            .padding(.vertical, 10)
+            .background(Color.white, in: Capsule())
+            .opacity(configuration.isPressed ? 0.75 : 1.0)
+    }
+}
+
 // MARK: - Liquid Glass Card Modifier
 
 struct GlassCardModifier: ViewModifier {

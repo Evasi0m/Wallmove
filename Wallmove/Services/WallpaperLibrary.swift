@@ -188,6 +188,12 @@ final class WallpaperLibrary {
         try save()
     }
 
+    func renameWallpaper(id: UUID, to newName: String) throws {
+        guard let index = persistedLibrary.wallpapers.firstIndex(where: { $0.id == id }) else { return }
+        persistedLibrary.wallpapers[index].displayName = newName
+        try save()
+    }
+
     func deleteWallpaper(id: UUID) throws {
         guard let item = wallpaper(with: id) else {
             return

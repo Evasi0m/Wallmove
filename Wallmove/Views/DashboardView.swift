@@ -1,16 +1,22 @@
 import AVFoundation
 import SwiftUI
+import UniformTypeIdentifiers
 
 enum DashboardWindowMetrics {
     static let defaultSize = CGSize(width: 1180, height: 860)
     static let minimumSize = CGSize(width: 920, height: 640)
-    static let maximumSize = CGSize(width: 1180, height: 860)
+    static let maximumSize = CGSize(width: 1440, height: 1080)
     static let sidebarWidth: CGFloat = 346
 }
 
 struct DashboardView: View {
     @ObservedObject var viewModel: WallmoveViewModel
     @State private var isSidebarVisible = true
+    @State private var isDragTargeted = false
+    @State private var showDeleteConfirmation = false
+    @State private var isRenaming = false
+    @State private var renameText = ""
+    @State private var isHoveringPreview = false
 
     var body: some View {
         VStack(spacing: 0) {
@@ -39,7 +45,21 @@ struct DashboardView: View {
         }, message: {
             Text(viewModel.errorMessage ?? "")
         })
+        .confirmationDialog(
+            "Delete "\(viewModel.selectedWallpaper?.displayName ?? "")"?",
+            isPresented: $showDeleteConfirmation,
+            titleVisibility: .visible
+        ) {
+            Button("Delete", role: .destructive) {
+                viewModel.deleteSelectedWallpaper()
+            }
+            Button("Cancel", role: .cancel) {}
+        } message: {
+            Text("This will permanently remove the video file from Wallmove.")
+        }
     }
+
+    // MARK: - Bindings
 
     private var wallpaperSelection: Binding<UUID?> {
         Binding(
@@ -47,6 +67,15 @@ struct DashboardView: View {
             set: { viewModel.selectWallpaper(id: $0) }
         )
     }
+
+    private var errorIsPresented: Binding<Bool> {
+        Binding(
+            get: { viewModel.errorMessage != nil },
+            set: { if !$0 { viewModel.errorMessage = nil } }
+        )
+    }
+
+    // MARK: - Top Bar
 
     private var topBar: some View {
         HStack(spacing: 10) {
@@ -58,7 +87,7 @@ struct DashboardView: View {
                     .frame(width: 28, height: 28)
             }
             .buttonStyle(.plain)
-            .background(.quaternary.opacity(0.8), in: RoundedRectangle(cornerRadius: 8))
+            .glassButton(cornerRadius: 8)
             .help(isSidebarVisible ? "Hide Sidebar" : "Show Sidebar")
 
             Spacer()
@@ -68,61 +97,112 @@ struct DashboardView: View {
         .background(Color(nsColor: .windowBackgroundColor))
     }
 
-    private var errorIsPresented: Binding<Bool> {
-        Binding(
-            get: { viewModel.errorMessage != nil },
-            set: { isPresented in
-                if !isPresented {
-                    viewModel.errorMessage = nil
+    // MARK: - Sidebar
+
+    private var sidebar: some View {
+        VStack(spacing: 0) {
+            VStack(alignment: .leading, spacing: 12) {
+                Text("Wallmove")
+                    .font(.system(size: 30, weight: .bold, design: .rounded))
+
+                Text("Minimal live wallpapers for your desktop and screen saver.")
+                    .foregroundStyle(.secondary)
+
+                HStack {
+                    Button("Import Videos", systemImage: "plus") {
+                        viewModel.importWallpapers()
+                    }
+                    .buttonStyle(.borderedProminent)
+
+                    if !viewModel.wallpapers.isEmpty {
+                        Text("\(viewModel.wallpapers.count) video\(viewModel.wallpapers.count == 1 ? "" : "s")")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    }
                 }
             }
-        )
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding(.horizontal, 20)
+            .padding(.top, 18)
+            .padding(.bottom, 12)
+            .background(Color(nsColor: .windowBackgroundColor))
+
+            List(selection: wallpaperSelection) {
+                if viewModel.wallpapers.isEmpty {
+                    dropZoneEmptyState
+                        .listRowSeparator(.hidden)
+                } else {
+                    ForEach(viewModel.wallpapers) { wallpaper in
+                        WallpaperRowView(
+                            wallpaper: wallpaper,
+                            isActive: wallpaper.id == viewModel.activeWallpaperID,
+                            isScreenSaver: wallpaper.id == viewModel.screenSaverWallpaperID
+                                && viewModel.screenSaverMode == .separate
+                        )
+                        .tag(wallpaper.id)
+                    }
+                }
+            }
+            .listStyle(.sidebar)
+            .onDrop(of: [.fileURL], isTargeted: $isDragTargeted) { providers in
+                handleDrop(providers)
+            }
+            .overlay(alignment: .bottom) {
+                if isDragTargeted {
+                    dropHighlight
+                }
+            }
+        }
+        .frame(maxHeight: .infinity)
     }
+
+    private var dropZoneEmptyState: some View {
+        VStack(spacing: 12) {
+            Image(systemName: isDragTargeted ? "film.stack.fill" : "film.stack")
+                .font(.system(size: 40))
+                .foregroundStyle(isDragTargeted ? .accent : .secondary)
+                .animation(.easeInOut(duration: 0.15), value: isDragTargeted)
+
+            Text(isDragTargeted ? "Drop to Import" : "No Wallpapers Yet")
+                .font(.headline)
+
+            Text("Import a `.mp4` or `.mov` file, or drop videos here to start building your library.")
+                .font(.caption)
+                .foregroundStyle(.secondary)
+                .multilineTextAlignment(.center)
+        }
+        .padding(.vertical, 20)
+        .padding(.horizontal, 8)
+        .frame(maxWidth: .infinity)
+        .contentShape(Rectangle())
+        .onDrop(of: [.fileURL], isTargeted: $isDragTargeted) { providers in
+            handleDrop(providers)
+        }
+    }
+
+    private var dropHighlight: some View {
+        RoundedRectangle(cornerRadius: 12)
+            .strokeBorder(.accent, lineWidth: 2)
+            .padding(6)
+            .transition(.opacity)
+    }
+
+    // MARK: - Preview Panel
 
     @ViewBuilder
     private var previewPanel: some View {
         if let wallpaper = viewModel.selectedWallpaper {
             ScrollView {
                 VStack(alignment: .leading, spacing: 20) {
-                    VStack(alignment: .leading, spacing: 8) {
-                        Text(wallpaper.displayName)
-                            .font(.system(size: 26, weight: .semibold, design: .rounded))
-
-                        Text("Choose how this clip behaves on the desktop and in screen saver mode.")
-                            .foregroundStyle(.secondary)
-                    }
+                    wallpaperHeader(for: wallpaper)
 
                     previewSurface
 
-                    HStack(spacing: 12) {
-                        Button("Apply to Desktop") {
-                            viewModel.applySelectedWallpaper()
-                        }
-                        .buttonStyle(.borderedProminent)
-
-                        Button("Delete") {
-                            viewModel.deleteSelectedWallpaper()
-                        }
-                        .buttonStyle(.bordered)
-                    }
+                    actionButtons
 
                     settingsCard
 
-                    VStack(alignment: .leading, spacing: 12) {
-                        Text("Storage")
-                            .font(.headline)
-
-                        Text("Imported videos are copied into `~/Library/Application Support/Wallmove/Wallpapers/`, so deleting the original file will not break Wallmove.")
-                            .font(.footnote)
-                            .foregroundStyle(.secondary)
-
-                        Button("Clear Imported Cache") {
-                            viewModel.clearCache()
-                        }
-                        .buttonStyle(.bordered)
-                    }
-                    .padding(18)
-                    .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 20))
+                    storageCard
                 }
                 .padding(.horizontal, 26)
                 .padding(.vertical, 20)
@@ -134,52 +214,71 @@ struct DashboardView: View {
                 systemImage: "play.rectangle",
                 description: Text("Choose a video from the sidebar to preview it and apply it to the desktop.")
             )
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .onDrop(of: [.fileURL], isTargeted: $isDragTargeted) { providers in
+                handleDrop(providers)
+            }
         }
     }
 
-    private var sidebar: some View {
-        VStack(spacing: 0) {
-            VStack(alignment: .leading, spacing: 12) {
-                Text("Wallmove")
-                    .font(.system(size: 30, weight: .bold, design: .rounded))
+    private func wallpaperHeader(for wallpaper: WallpaperItem) -> some View {
+        VStack(alignment: .leading, spacing: 6) {
+            if isRenaming {
+                HStack(spacing: 8) {
+                    TextField("Name", text: $renameText)
+                        .font(.system(size: 26, weight: .semibold, design: .rounded))
+                        .textFieldStyle(.plain)
+                        .onSubmit { commitRename(for: wallpaper) }
 
-                Text("Minimal live wallpapers for your desktop and screen saver.")
-                    .foregroundStyle(.secondary)
+                    Button("Done") { commitRename(for: wallpaper) }
+                        .buttonStyle(.borderedProminent)
+                        .controlSize(.small)
 
-                Button("Import Videos", systemImage: "plus") {
-                    viewModel.importWallpapers()
+                    Button("Cancel") { isRenaming = false }
+                        .buttonStyle(.bordered)
+                        .controlSize(.small)
                 }
-                .buttonStyle(.borderedProminent)
-            }
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .padding(.horizontal, 20)
-            .padding(.top, 18)
-            .padding(.bottom, 12)
-            .background(Color(nsColor: .windowBackgroundColor))
+            } else {
+                HStack(alignment: .center, spacing: 10) {
+                    Text(wallpaper.displayName)
+                        .font(.system(size: 26, weight: .semibold, design: .rounded))
 
-            List(selection: wallpaperSelection) {
-                if viewModel.wallpapers.isEmpty {
-                    ContentUnavailableView(
-                        "No Wallpapers Yet",
-                        systemImage: "film.stack",
-                        description: Text("Import a `.mp4` or `.mov` file to start building your local wallpaper library.")
-                    )
-                    .listRowSeparator(.hidden)
-                } else {
-                    ForEach(viewModel.wallpapers) { wallpaper in
-                        WallpaperRowView(
-                            wallpaper: wallpaper,
-                            isActive: wallpaper.id == viewModel.activeWallpaperID,
-                            isScreenSaver: wallpaper.id == viewModel.screenSaverWallpaperID && viewModel.screenSaverMode == .separate
-                        )
-                        .tag(wallpaper.id)
+                    Button {
+                        renameText = wallpaper.displayName
+                        isRenaming = true
+                    } label: {
+                        Image(systemName: "pencil")
+                            .font(.system(size: 13, weight: .medium))
+                            .foregroundStyle(.secondary)
+                    }
+                    .buttonStyle(.plain)
+                    .help("Rename")
+
+                    if wallpaper.id == viewModel.activeWallpaperID {
+                        Label("Active", systemImage: "checkmark.circle.fill")
+                            .font(.caption.weight(.semibold))
+                            .foregroundStyle(.green)
+                            .padding(.horizontal, 8)
+                            .padding(.vertical, 3)
+                            .glassCapsule(color: .green)
                     }
                 }
             }
-            .listStyle(.sidebar)
+
+            Text("Choose how this clip behaves on the desktop and in screen saver mode.")
+                .foregroundStyle(.secondary)
         }
-        .frame(maxHeight: .infinity)
+        .onChange(of: viewModel.selectedWallpaperID) { _ in
+            isRenaming = false
+        }
     }
+
+    private func commitRename(for wallpaper: WallpaperItem) {
+        viewModel.renameWallpaper(id: wallpaper.id, to: renameText)
+        isRenaming = false
+    }
+
+    // MARK: - Preview Surface
 
     private var previewSurface: some View {
         GeometryReader { geometry in
@@ -187,10 +286,14 @@ struct DashboardView: View {
             let targetWidth = max(width, 320)
             let targetHeight = min(max(targetWidth * 9 / 16, 260), 430)
 
-            LoopingVideoView(
-                playerController: viewModel.previewController,
-                videoGravity: .resizeAspectFill
-            )
+            ZStack {
+                LoopingVideoView(
+                    playerController: viewModel.previewController,
+                    videoGravity: .resizeAspectFill
+                )
+
+                playPauseOverlay
+            }
             .frame(width: targetWidth, height: targetHeight)
             .background(
                 LinearGradient(
@@ -201,10 +304,60 @@ struct DashboardView: View {
                 in: RoundedRectangle(cornerRadius: 24)
             )
             .clipShape(RoundedRectangle(cornerRadius: 24))
+            .overlay(
+                RoundedRectangle(cornerRadius: 24)
+                    .strokeBorder(
+                        LinearGradient(
+                            colors: [.white.opacity(0.25), .white.opacity(0.05)],
+                            startPoint: .topLeading,
+                            endPoint: .bottomTrailing
+                        ),
+                        lineWidth: 1
+                    )
+            )
+            .onHover { hovering in
+                withAnimation(.easeInOut(duration: 0.15)) {
+                    isHoveringPreview = hovering
+                }
+            }
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
         }
         .frame(height: 430)
     }
+
+    private var playPauseOverlay: some View {
+        Button {
+            viewModel.togglePreviewPlayback()
+        } label: {
+            Image(systemName: viewModel.isPreviewPaused ? "play.circle.fill" : "pause.circle.fill")
+                .font(.system(size: 42))
+                .foregroundStyle(.white.opacity(0.85))
+                .shadow(color: .black.opacity(0.4), radius: 8, x: 0, y: 2)
+        }
+        .buttonStyle(.plain)
+        .opacity(viewModel.isPreviewPaused || isHoveringPreview ? 1 : 0)
+        .animation(.easeInOut(duration: 0.15), value: isHoveringPreview)
+        .contentShape(Rectangle())
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+    }
+
+    // MARK: - Action Buttons
+
+    private var actionButtons: some View {
+        HStack(spacing: 12) {
+            Button("Apply to Desktop") {
+                viewModel.applySelectedWallpaper()
+            }
+            .buttonStyle(.borderedProminent)
+
+            Button("Delete") {
+                showDeleteConfirmation = true
+            }
+            .buttonStyle(.bordered)
+        }
+    }
+
+    // MARK: - Settings Card
 
     private var settingsCard: some View {
         VStack(alignment: .leading, spacing: 18) {
@@ -256,7 +409,58 @@ struct DashboardView: View {
             }
         }
         .padding(18)
-        .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 20))
+        .glassCard(cornerRadius: 20)
+    }
+
+    // MARK: - Storage Card
+
+    private var storageCard: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            HStack {
+                Text("Storage")
+                    .font(.headline)
+
+                Spacer()
+
+                Text(viewModel.cacheSize)
+                    .font(.caption.weight(.semibold))
+                    .foregroundStyle(.secondary)
+                    .padding(.horizontal, 8)
+                    .padding(.vertical, 3)
+                    .glassCapsule(color: .secondary)
+            }
+
+            Text("Imported videos are copied into `~/Library/Application Support/Wallmove/Wallpapers/`, so deleting the original file will not break Wallmove.")
+                .font(.footnote)
+                .foregroundStyle(.secondary)
+
+            Button("Clear Imported Cache") {
+                viewModel.clearCache()
+            }
+            .buttonStyle(.bordered)
+        }
+        .padding(18)
+        .glassCard(cornerRadius: 20)
+    }
+
+    // MARK: - Drag & Drop
+
+    @discardableResult
+    private func handleDrop(_ providers: [NSItemProvider]) -> Bool {
+        var handled = false
+        for provider in providers {
+            provider.loadItem(forTypeIdentifier: UTType.fileURL.identifier, options: nil) { item, _ in
+                guard let data = item as? Data,
+                      let url = URL(dataRepresentation: data, relativeTo: nil) else { return }
+                let ext = url.pathExtension.lowercased()
+                guard ["mp4", "mov"].contains(ext) else { return }
+                DispatchQueue.main.async {
+                    self.viewModel.importDroppedURLs([url])
+                }
+                handled = true
+            }
+        }
+        return true
     }
 }
 

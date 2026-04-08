@@ -15,6 +15,7 @@ final class WallmoveViewModel: ObservableObject {
     @Published var launchAtLoginEnabled = false
     @Published var launchAtLoginDescription = ""
     @Published var errorMessage: String?
+    @Published var isPreviewPaused = false
 
     let previewController = LoopingVideoPlayerController()
     let launchAtLoginController = LaunchAtLoginController()
@@ -99,7 +100,13 @@ final class WallmoveViewModel: ObservableObject {
 
     func selectWallpaper(id: UUID?) {
         selectedWallpaperID = id
+        isPreviewPaused = false
         refreshPreview()
+    }
+
+    func togglePreviewPlayback() {
+        isPreviewPaused.toggle()
+        previewController.setPaused(isPreviewPaused)
     }
 
     func setLaunchAtLoginEnabled(_ enabled: Bool) {
@@ -122,6 +129,45 @@ final class WallmoveViewModel: ObservableObject {
         } catch {
             errorMessage = error.localizedDescription
         }
+    }
+
+    func renameWallpaper(id: UUID, to newName: String) {
+        let trimmed = newName.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !trimmed.isEmpty else { return }
+        do {
+            try library.renameWallpaper(id: id, to: trimmed)
+            refreshState(preferredSelection: selectedWallpaperID)
+        } catch {
+            errorMessage = error.localizedDescription
+        }
+    }
+
+    func importDroppedURLs(_ urls: [URL]) {
+        let videoURLs = urls.filter { ["mp4", "mov"].contains($0.pathExtension.lowercased()) }
+        guard !videoURLs.isEmpty else { return }
+        do {
+            let imported = try library.importVideos(from: videoURLs)
+            refreshState(preferredSelection: imported.first?.id)
+            refreshPreview()
+        } catch {
+            errorMessage = error.localizedDescription
+        }
+    }
+
+    var cacheSize: String {
+        let fm = FileManager.default
+        let total = wallpapers.compactMap { item -> Int64? in
+            let url = item.videoURL(in: AppDirectories.wallpapers)
+            return (try? fm.attributesOfItem(atPath: url.path)[.size] as? Int64) ?? 0
+        }.reduce(0, +)
+        let bytes = Measurement(value: Double(total), unit: UnitInformationStorage.bytes)
+            .converted(to: .gigabytes)
+        if bytes.value >= 1 {
+            return String(format: "%.1f GB", bytes.value)
+        }
+        let mb = Measurement(value: Double(total), unit: UnitInformationStorage.bytes)
+            .converted(to: .megabytes)
+        return String(format: "%.0f MB", mb.value)
     }
 
     func clearCache() {
@@ -176,6 +222,6 @@ final class WallmoveViewModel: ObservableObject {
     private func refreshPreview() {
         let previewURL = selectedWallpaper?.videoURL(in: AppDirectories.wallpapers)
         previewController.loadVideo(url: previewURL)
-        previewController.setPaused(false)
+        previewController.setPaused(isPreviewPaused)
     }
 }

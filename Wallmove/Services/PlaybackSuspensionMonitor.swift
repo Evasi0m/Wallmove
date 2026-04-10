@@ -5,10 +5,8 @@ import CoreGraphics
 @MainActor
 final class PlaybackSuspensionMonitor: ObservableObject {
     @Published private(set) var shouldSuspendDesktopPlayback = false
-    @Published private(set) var isScreenSaverRunning = false
 
     private var workspaceObservers: [Any] = []
-    private var distributedObservers: [Any] = []
     private var isDisplaySleeping = false
 
     init() {
@@ -42,26 +40,6 @@ final class PlaybackSuspensionMonitor: ObservableObject {
             }
         ]
 
-        let distributedCenter = DistributedNotificationCenter.default()
-        let didStart = Notification.Name("com.apple.screensaver.didstart")
-        let didStop = Notification.Name("com.apple.screensaver.didstop")
-        distributedObservers = [
-            distributedCenter.addObserver(forName: didStart, object: nil, queue: .main) { [weak self] _ in
-                guard let self else { return }
-                Task { @MainActor in
-                    self.isScreenSaverRunning = true
-                    self.evaluatePlaybackState()
-                }
-            },
-            distributedCenter.addObserver(forName: didStop, object: nil, queue: .main) { [weak self] _ in
-                guard let self else { return }
-                Task { @MainActor in
-                    self.isScreenSaverRunning = false
-                    self.evaluatePlaybackState()
-                }
-            }
-        ]
-
         NotificationCenter.default.addObserver(
             self,
             selector: #selector(handleScreenConfigurationChange),
@@ -75,10 +53,6 @@ final class PlaybackSuspensionMonitor: ObservableObject {
     deinit {
         let workspaceCenter = NSWorkspace.shared.notificationCenter
         workspaceObservers.forEach { workspaceCenter.removeObserver($0) }
-
-        let distributedCenter = DistributedNotificationCenter.default()
-        distributedObservers.forEach { distributedCenter.removeObserver($0) }
-
         NotificationCenter.default.removeObserver(self)
     }
 
@@ -88,7 +62,7 @@ final class PlaybackSuspensionMonitor: ObservableObject {
     }
 
     private func evaluatePlaybackState() {
-        shouldSuspendDesktopPlayback = isDisplaySleeping || isScreenSaverRunning || frontmostApplicationOccupiesFullScreen()
+        shouldSuspendDesktopPlayback = isDisplaySleeping || frontmostApplicationOccupiesFullScreen()
     }
 
     private func frontmostApplicationOccupiesFullScreen() -> Bool {

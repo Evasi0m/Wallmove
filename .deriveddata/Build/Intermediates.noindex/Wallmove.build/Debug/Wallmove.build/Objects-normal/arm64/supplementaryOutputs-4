@@ -1,0 +1,23 @@
+{
+  "/Users/j3da1/Desktop/Wallmove/Wallmove/Support/AppDelegate.swift" : {
+    "const-values" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/AppDelegate.swiftconstvalues",
+    "dependencies" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/AppDelegate.d",
+    "diagnostics" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/AppDelegate.dia",
+    "object" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/AppDelegate.o",
+    "swift-dependencies" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/AppDelegate.swiftdeps"
+  },
+  "/Users/j3da1/Desktop/Wallmove/Wallmove/Support/AppDirectories.swift" : {
+    "const-values" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/AppDirectories.swiftconstvalues",
+    "dependencies" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/AppDirectories.d",
+    "diagnostics" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/AppDirectories.dia",
+    "object" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/AppDirectories.o",
+    "swift-dependencies" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/AppDirectories.swiftdeps"
+  },
+  "/Users/j3da1/Desktop/Wallmove/Wallmove/Support/DashboardLauncher.swift" : {
+    "const-values" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/DashboardLauncher.swiftconstvalues",
+    "dependencies" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/DashboardLauncher.d",
+    "diagnostics" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/DashboardLauncher.dia",
+    "object" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/DashboardLauncher.o",
+    "swift-dependencies" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/DashboardLauncher.swiftdeps"
+  }
+}

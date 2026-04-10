@@ -1,0 +1,88 @@
+{
+  "source": "/Users/j3da1/Desktop/Wallmove/Wallmove/Views/WallpaperPreviewView.swift",
+  "tables": {
+    "Localizable": [
+      {
+        "comment": "",
+        "key": "Delete \"%@\"?",
+        "location": {
+          "startingColumn": 13,
+          "startingLine": 39
+        }
+      },
+      {
+        "comment": "",
+        "key": "Delete",
+        "location": {
+          "startingColumn": 20,
+          "startingLine": 43
+        }
+      },
+      {
+        "comment": "",
+        "key": "Cancel",
+        "location": {
+          "startingColumn": 20,
+          "startingLine": 47
+        }
+      },
+      {
+        "comment": "",
+        "key": "This will permanently remove the video file from Wallmove.",
+        "location": {
+          "startingColumn": 18,
+          "startingLine": 49
+        }
+      },
+      {
+        "comment": "",
+        "key": "Name",
+        "location": {
+          "startingColumn": 31,
+          "startingLine": 93
+        }
+      },
+      {
+        "comment": "",
+        "key": "Done",
+        "location": {
+          "startingColumn": 28,
+          "startingLine": 100
+        }
+      },
+      {
+        "comment": "",
+        "key": "Rename",
+        "location": {
+          "startingColumn": 27,
+          "startingLine": 126
+        }
+      },
+      {
+        "comment": "",
+        "key": "Currently active on desktop",
+        "location": {
+          "startingColumn": 35,
+          "startingLine": 132
+        }
+      },
+      {
+        "comment": "",
+        "key": "Applied",
+        "location": {
+          "startingColumn": 30,
+          "startingLine": 162
+        }
+      },
+      {
+        "comment": "",
+        "key": "Apply to Desktop",
+        "location": {
+          "startingColumn": 42,
+          "startingLine": 162
+        }
+      }
+    ]
+  },
+  "version": 1
+}

@@ -3,7 +3,6 @@ import SwiftUI
 struct WallpaperRowView: View {
     let wallpaper: WallpaperItem
     let isActive: Bool
-    let isScreenSaver: Bool
     let isCompact: Bool
 
     var body: some View {
@@ -23,14 +22,8 @@ struct WallpaperRowView: View {
                         .foregroundStyle(.secondary)
                         .lineLimit(1)
 
-                    HStack(spacing: 8) {
-                        if isActive {
-                            label("Desktop", color: .green)
-                        }
-
-                        if isScreenSaver {
-                            label("Screen Saver", color: .blue)
-                        }
+                    if isActive {
+                        label("Desktop", color: .green)
                     }
                 }
             }

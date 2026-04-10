@@ -4,12 +4,9 @@ import Combine
 @MainActor
 final class WallpaperEngine {
     private var desktopWindowControllers: [String: DesktopWallpaperWindowController] = [:]
-    private var screenSaverWindowControllers: [String: DesktopWallpaperWindowController] = [:]
     private let suspensionMonitor = PlaybackSuspensionMonitor()
     private var desktopSuspensionCancellable: AnyCancellable?
-    private var screenSaverStateCancellable: AnyCancellable?
     private var currentWallpaperURL: URL?
-    private var currentScreenSaverURL: URL?
 
     init() {
         rebuildWindows()
@@ -17,11 +14,6 @@ final class WallpaperEngine {
         desktopSuspensionCancellable = suspensionMonitor.$shouldSuspendDesktopPlayback
             .sink { [weak self] shouldSuspend in
                 self?.desktopWindowControllers.values.forEach { $0.setPaused(shouldSuspend) }
-            }
-
-        screenSaverStateCancellable = suspensionMonitor.$isScreenSaverRunning
-            .sink { [weak self] isRunning in
-                self?.updateScreenSaverPresentation(isRunning: isRunning)
             }
 
         NotificationCenter.default.addObserver(
@@ -36,38 +28,20 @@ final class WallpaperEngine {
         NotificationCenter.default.removeObserver(self)
     }
 
-    func configure(desktopURL: URL?, screenSaverURL: URL?) {
+    func configure(desktopURL: URL?) {
         currentWallpaperURL = desktopURL
-        currentScreenSaverURL = screenSaverURL
         rebuildWindows()
-
-        desktopWindowControllers.values.forEach { controller in
-            controller.showVideo(at: desktopURL)
-            controller.setPaused(suspensionMonitor.shouldSuspendDesktopPlayback)
-        }
-
-        updateScreenSaverPresentation(isRunning: suspensionMonitor.isScreenSaverRunning)
+        refreshDesktopPresentation()
     }
 
     func hideAll() {
-        configure(desktopURL: nil, screenSaverURL: nil)
-    }
-
-    private func updateScreenSaverPresentation(isRunning: Bool) {
-        screenSaverWindowControllers.values.forEach { controller in
-            controller.showVideo(at: isRunning ? currentScreenSaverURL : nil)
-            controller.setPaused(!isRunning || currentScreenSaverURL == nil)
-        }
+        configure(desktopURL: nil)
     }
 
     @objc
     private func handleScreenConfigurationChange() {
         rebuildWindows()
-        desktopWindowControllers.values.forEach { controller in
-            controller.showVideo(at: currentWallpaperURL)
-            controller.setPaused(suspensionMonitor.shouldSuspendDesktopPlayback)
-        }
-        updateScreenSaverPresentation(isRunning: suspensionMonitor.isScreenSaverRunning)
+        refreshDesktopPresentation()
     }
 
     private func rebuildWindows() {
@@ -79,37 +53,34 @@ final class WallpaperEngine {
             if let controller = desktopWindowControllers[key] {
                 controller.updateScreen(screen)
             } else {
-                let controller = DesktopWallpaperWindowController(screen: screen, placement: .desktop)
+                let controller = DesktopWallpaperWindowController(screen: screen)
                 controller.showVideo(at: currentWallpaperURL)
                 controller.setPaused(suspensionMonitor.shouldSuspendDesktopPlayback)
                 desktopWindowControllers[key] = controller
-            }
-
-            if let controller = screenSaverWindowControllers[key] {
-                controller.updateScreen(screen)
-            } else {
-                let controller = DesktopWallpaperWindowController(screen: screen, placement: .screenSaver)
-                controller.showVideo(at: nil)
-                controller.setPaused(true)
-                screenSaverWindowControllers[key] = controller
             }
         }
 
         desktopWindowControllers.keys
             .filter { !keys.contains($0) }
             .forEach { key in
+                desktopWindowControllers[key]?.showVideo(at: nil)
                 desktopWindowControllers.removeValue(forKey: key)
             }
+    }
 
-        screenSaverWindowControllers.keys
-            .filter { !keys.contains($0) }
-            .forEach { key in
-                screenSaverWindowControllers.removeValue(forKey: key)
-            }
+    private func refreshDesktopPresentation() {
+        desktopWindowControllers.values.forEach { controller in
+            controller.showVideo(at: currentWallpaperURL)
+            controller.setPaused(suspensionMonitor.shouldSuspendDesktopPlayback)
+        }
     }
 
     private static func screenKey(_ screen: NSScreen) -> String {
         let number = screen.deviceDescription[NSDeviceDescriptionKey("NSScreenNumber")] as? NSNumber
-        return number?.stringValue ?? UUID().uuidString
+        if let number {
+            return number.stringValue
+        }
+
+        return "\(screen.localizedName)-\(Int(screen.frame.origin.x))-\(Int(screen.frame.origin.y))-\(Int(screen.frame.width))x\(Int(screen.frame.height))"
     }
 }

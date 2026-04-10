@@ -5,208 +5,173 @@ struct SettingsView: View {
 
     var body: some View {
         ZStack {
-            Color.wmBackground.ignoresSafeArea()
-
+            Color.clear.ignoresSafeArea()
             ScrollView {
-                VStack(spacing: 28) {
-                    appHeader
-                    preferencesCard
-                    storageCard
+                VStack(alignment: .leading, spacing: 22) {
+                    headerView
+
+                    LazyVGrid(
+                        columns: [
+                            GridItem(.flexible(), spacing: 18),
+                            GridItem(.flexible(), spacing: 18)
+                        ],
+                        spacing: 18
+                    ) {
+                        playbackCard
+                        desktopCard
+                        storageCard
+                        aboutCard
+                    }
                 }
-                .frame(maxWidth: 480)
-                .frame(maxWidth: .infinity)
-                .padding(.vertical, 36)
+                .padding(.horizontal, 28)
+                .padding(.top, 104)
+                .padding(.bottom, 28)
             }
         }
     }
 
-    // MARK: - App Header
-
-    private var appHeader: some View {
-        VStack(spacing: 12) {
-            ZStack {
-                RoundedRectangle(cornerRadius: 22)
-                    .fill(Color.wmSurface)
-                    .frame(width: 80, height: 80)
-                Image(systemName: "play.rectangle.on.rectangle.fill")
-                    .font(.system(size: 36, weight: .bold))
-                    .foregroundStyle(.white)
-            }
-
-            Text("Wallmove")
-                .font(.system(size: 22, weight: .bold))
+    private var headerView: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Text("Settings")
+                .font(.system(size: 34, weight: .bold))
                 .foregroundStyle(.white)
 
-            if let version = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String {
-                Text("Version \(version)")
-                    .font(.system(size: 13))
-                    .foregroundStyle(Color.wmTextSecondary)
-            }
+            Text("Tune how Wallmove behaves on login, local storage, and the live desktop wallpaper engine.")
+                .font(.system(size: 14))
+                .foregroundStyle(Color.white.opacity(0.68))
+                .fixedSize(horizontal: false, vertical: true)
         }
     }
 
-    // MARK: - Preferences Card
-
-    private var preferencesCard: some View {
-        VStack(alignment: .leading, spacing: 0) {
-            sectionHeader("Preferences")
-
-            rowDivider
-
-            // Launch at Login
-            settingsRow(
-                leading: {
+    private var playbackCard: some View {
+        settingsPanel(
+            title: "Playback",
+            subtitle: "Launch behavior and startup status."
+        ) {
+            HStack(alignment: .top) {
+                VStack(alignment: .leading, spacing: 6) {
                     Text("Launch at Login")
+                        .font(.system(size: 15, weight: .semibold))
                         .foregroundStyle(.white)
-                        .font(.system(size: 14))
-                },
-                trailing: {
-                    Toggle("", isOn: Binding(
-                        get: { viewModel.launchAtLoginEnabled },
-                        set: { viewModel.setLaunchAtLoginEnabled($0) }
-                    ))
-                    .labelsHidden()
+
+                    Text(viewModel.launchAtLoginDescription.isEmpty ? "Control whether Wallmove opens automatically after login." : viewModel.launchAtLoginDescription)
+                        .font(.system(size: 13))
+                        .foregroundStyle(Color.white.opacity(0.62))
+                        .fixedSize(horizontal: false, vertical: true)
                 }
-            )
 
-            if !viewModel.launchAtLoginDescription.isEmpty {
-                Text(viewModel.launchAtLoginDescription)
-                    .font(.system(size: 11))
-                    .foregroundStyle(Color.wmTextSecondary)
-                    .padding(.horizontal, 16)
-                    .padding(.bottom, 12)
-            }
+                Spacer()
 
-            rowDivider
-
-            // Screen Saver Mode
-            settingsRow(
-                leading: {
-                    Text("Screen Saver")
-                        .foregroundStyle(.white)
-                        .font(.system(size: 14))
-                },
-                trailing: {
-                    Picker("", selection: $viewModel.selectedScreenSaverMode) {
-                        ForEach(WallpaperLibrary.ScreenSaverMode.allCases) { mode in
-                            Text(mode.title).tag(mode)
-                        }
-                    }
-                    .labelsHidden()
-                    .frame(width: 170)
-                }
-            )
-
-            if viewModel.selectedScreenSaverMode == .separate {
-                VStack(alignment: .leading, spacing: 8) {
-                    Text("Screen Saver Wallpaper")
-                        .font(.system(size: 12))
-                        .foregroundStyle(Color.wmTextSecondary)
-
-                    Picker("", selection: Binding(
-                        get: { viewModel.selectedScreenSaverWallpaperID },
-                        set: { viewModel.selectedScreenSaverWallpaperID = $0 }
-                    )) {
-                        ForEach(viewModel.wallpapers) { w in
-                            Text(w.displayName).tag(Optional(w.id))
-                        }
-                    }
-                    .labelsHidden()
-                }
-                .padding(.horizontal, 16)
-                .padding(.bottom, 10)
-            }
-
-            if viewModel.selectedScreenSaverMode != viewModel.screenSaverMode
-                || viewModel.selectedScreenSaverWallpaperID != viewModel.screenSaverWallpaperID {
-                HStack {
-                    Spacer()
-                    Button("Apply Screen Saver Settings") {
-                        viewModel.applyScreenSaverSettings()
-                    }
-                    .buttonStyle(.borderedProminent)
-                    .controlSize(.small)
-                }
-                .padding(.horizontal, 16)
-                .padding(.bottom, 12)
+                Toggle("", isOn: Binding(
+                    get: { viewModel.launchAtLoginEnabled },
+                    set: { viewModel.setLaunchAtLoginEnabled($0) }
+                ))
+                .labelsHidden()
+                .toggleStyle(.switch)
             }
         }
-        .background(Color.wmSurface, in: RoundedRectangle(cornerRadius: 14))
-        .frame(maxWidth: 480)
-        .padding(.horizontal, 20)
     }
 
-    // MARK: - Storage Card
+    private var desktopCard: some View {
+        settingsPanel(
+            title: "Desktop Wallpaper",
+            subtitle: "Wallmove now focuses only on the live desktop wallpaper experience."
+        ) {
+            VStack(alignment: .leading, spacing: 16) {
+                infoLine("Active Wallpaper", value: viewModel.activeWallpaper?.displayName ?? "Not applied")
+                infoLine("Imported Clips", value: "\(viewModel.wallpapers.count)")
+
+                Text("Choose or change your live wallpaper from Home or Library. Settings here stay focused on system behavior and storage.")
+                    .font(.system(size: 13))
+                    .foregroundStyle(Color.white.opacity(0.62))
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+        }
+    }
 
     private var storageCard: some View {
-        VStack(alignment: .leading, spacing: 0) {
-            sectionHeader("Storage")
-
-            rowDivider
-
-            settingsRow(
-                leading: {
-                    VStack(alignment: .leading, spacing: 3) {
+        settingsPanel(
+            title: "Storage",
+            subtitle: "Everything imported into Wallmove is copied into local app storage."
+        ) {
+            VStack(alignment: .leading, spacing: 16) {
+                HStack {
+                    VStack(alignment: .leading, spacing: 6) {
                         Text("Imported Cache")
+                            .font(.system(size: 15, weight: .semibold))
                             .foregroundStyle(.white)
-                            .font(.system(size: 14))
+
                         Text(viewModel.wallpapers.isEmpty ? "Empty" : viewModel.cacheSize)
-                            .foregroundStyle(Color.wmTextSecondary)
-                            .font(.system(size: 12))
+                            .font(.system(size: 13))
+                            .foregroundStyle(Color.white.opacity(0.62))
                     }
-                },
-                trailing: {
-                    Button {
+
+                    Spacer()
+
+                    Button("Clear Cache") {
                         viewModel.clearCache()
-                    } label: {
-                        Image(systemName: "trash")
-                            .font(.system(size: 15))
-                            .foregroundStyle(Color.white.opacity(0.55))
                     }
-                    .buttonStyle(.plain)
+                    .buttonStyle(.bordered)
+                    .controlSize(.large)
                     .disabled(viewModel.wallpapers.isEmpty)
-                    .help("Clear all imported videos")
+                    .handCursor()
                 }
-            )
 
-            Text("Videos are copied into ~/Library/Application Support/Wallmove/. Deleting the originals will not break the app.")
-                .font(.system(size: 11))
-                .foregroundStyle(Color.wmTextSecondary)
-                .padding(.horizontal, 16)
-                .padding(.bottom, 14)
+                Text("Deleting the original imported file will not break the wallpaper because Wallmove plays the copy stored in Application Support.")
+                    .font(.system(size: 13))
+                    .foregroundStyle(Color.white.opacity(0.62))
+                    .fixedSize(horizontal: false, vertical: true)
+            }
         }
-        .background(Color.wmSurface, in: RoundedRectangle(cornerRadius: 14))
-        .frame(maxWidth: 480)
-        .padding(.horizontal, 20)
     }
 
-    // MARK: - Helpers
-
-    private func sectionHeader(_ title: String) -> some View {
-        Text(title)
-            .font(.system(size: 12, weight: .semibold))
-            .foregroundStyle(Color.wmTextSecondary)
-            .padding(.horizontal, 16)
-            .padding(.vertical, 12)
+    private var aboutCard: some View {
+        settingsPanel(
+            title: "About Wallmove",
+            subtitle: "Current app details and quick workflow notes."
+        ) {
+            VStack(alignment: .leading, spacing: 12) {
+                infoLine("Version", value: Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "Unknown")
+                infoLine("Desktop", value: viewModel.activeWallpaper?.displayName ?? "Not applied")
+                infoLine("Imported", value: "\(viewModel.wallpapers.count) wallpaper\(viewModel.wallpapers.count == 1 ? "" : "s")")
+            }
+        }
     }
 
-    private var rowDivider: some View {
-        Rectangle()
-            .fill(Color.wmBorder)
-            .frame(height: 1)
-            .padding(.leading, 16)
-    }
-
-    private func settingsRow<L: View, T: View>(
-        @ViewBuilder leading: () -> L,
-        @ViewBuilder trailing: () -> T
+    private func settingsPanel<Content: View>(
+        title: String,
+        subtitle: String,
+        @ViewBuilder content: () -> Content
     ) -> some View {
-        HStack {
-            leading()
-            Spacer()
-            trailing()
+        VStack(alignment: .leading, spacing: 18) {
+            VStack(alignment: .leading, spacing: 8) {
+                Text(title)
+                    .font(.system(size: 18, weight: .semibold))
+                    .foregroundStyle(.white)
+
+                Text(subtitle)
+                    .font(.system(size: 13))
+                    .foregroundStyle(Color.white.opacity(0.62))
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+
+            content()
         }
-        .padding(.horizontal, 16)
-        .padding(.vertical, 13)
+        .padding(22)
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+        .glassCard(cornerRadius: 30)
+    }
+
+    private func infoLine(_ title: String, value: String) -> some View {
+        HStack {
+            Text(title)
+                .font(.system(size: 13, weight: .semibold))
+                .foregroundStyle(Color.white.opacity(0.58))
+            Spacer()
+            Text(value)
+                .font(.system(size: 13))
+                .foregroundStyle(.white)
+                .multilineTextAlignment(.trailing)
+        }
     }
 }

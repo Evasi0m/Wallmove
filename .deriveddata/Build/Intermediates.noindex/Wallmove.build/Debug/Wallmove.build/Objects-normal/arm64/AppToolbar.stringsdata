@@ -1,0 +1,32 @@
+{
+  "source": "/Users/j3da1/Desktop/Wallmove/Wallmove/Views/AppToolbar.swift",
+  "tables": {
+    "Localizable": [
+      {
+        "comment": "",
+        "key": "Import Videos",
+        "location": {
+          "startingColumn": 15,
+          "startingLine": 103
+        }
+      },
+      {
+        "comment": "",
+        "key": "Wallmove",
+        "location": {
+          "startingColumn": 18,
+          "startingLine": 31
+        }
+      },
+      {
+        "comment": "",
+        "key": "Import Wallpaper",
+        "location": {
+          "startingColumn": 22,
+          "startingLine": 81
+        }
+      }
+    ]
+  },
+  "version": 1
+}

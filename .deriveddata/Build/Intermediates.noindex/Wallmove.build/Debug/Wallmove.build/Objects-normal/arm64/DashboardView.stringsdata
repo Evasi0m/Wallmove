@@ -1,0 +1,24 @@
+{
+  "source": "/Users/j3da1/Desktop/Wallmove/Wallmove/Views/DashboardView.swift",
+  "tables": {
+    "Localizable": [
+      {
+        "comment": "",
+        "key": "Error",
+        "location": {
+          "startingColumn": 16,
+          "startingLine": 62
+        }
+      },
+      {
+        "comment": "",
+        "key": "OK",
+        "location": {
+          "startingColumn": 20,
+          "startingLine": 63
+        }
+      }
+    ]
+  },
+  "version": 1
+}

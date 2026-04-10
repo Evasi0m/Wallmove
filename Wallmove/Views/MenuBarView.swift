@@ -6,8 +6,9 @@ struct MenuBarView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
             Button("Open Dashboard") {
-                DashboardLauncher.openDashboard?()
+                DashboardLauncher.showDashboard()
             }
+            .handCursor()
 
             Divider()
 
@@ -28,6 +29,7 @@ struct MenuBarView: View {
             Button("Quit Wallmove") {
                 NSApp.terminate(nil)
             }
+            .handCursor()
         }
         .padding(10)
         .frame(minWidth: 240)
@@ -36,10 +38,9 @@ struct MenuBarView: View {
     @ViewBuilder
     private var statusSection: some View {
         VStack(alignment: .leading, spacing: 6) {
-            Label("Status", systemImage: "circle.fill")
+            Text("Status")
                 .font(.caption.weight(.semibold))
                 .foregroundStyle(.secondary)
-                .labelStyle(TitleOnlyLabelStyle())
 
             if let active = viewModel.activeWallpaper {
                 HStack(spacing: 6) {
@@ -56,42 +57,9 @@ struct MenuBarView: View {
                     .foregroundStyle(.secondary)
             }
 
-            screenSaverStatus
-        }
-    }
-
-    @ViewBuilder
-    private var screenSaverStatus: some View {
-        switch viewModel.screenSaverMode {
-        case .off:
-            HStack(spacing: 6) {
-                Image(systemName: "moon.zzz")
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-                Text("Screen saver: Off")
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-            }
-        case .mirrorDesktop:
-            HStack(spacing: 6) {
-                Image(systemName: "rectangle.on.rectangle")
-                    .font(.caption)
-                    .foregroundStyle(.blue)
-                Text("Screen saver: Same as desktop")
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-            }
-        case .separate:
-            if let ssWallpaper = viewModel.screenSaverWallpaper {
-                HStack(spacing: 6) {
-                    Image(systemName: "moon.stars")
-                        .font(.caption)
-                        .foregroundStyle(.blue)
-                    Text("Screen saver: \(ssWallpaper.displayName)")
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
-                }
-            }
+            Text("\(viewModel.wallpapers.count) wallpaper\(viewModel.wallpapers.count == 1 ? "" : "s") imported")
+                .font(.caption)
+                .foregroundStyle(.secondary)
         }
     }
 }

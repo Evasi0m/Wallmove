@@ -7,18 +7,25 @@ struct LibraryView: View {
 
     @State private var isDragTargeted = false
 
-    private let columns = [GridItem(.adaptive(minimum: 210, maximum: 270), spacing: 12)]
+    private let columns = [GridItem(.adaptive(minimum: 220, maximum: 220), spacing: 12, alignment: .top)]
 
     var body: some View {
         ZStack {
-            Color.wmBackground.ignoresSafeArea()
+            Color.clear.ignoresSafeArea()
 
-            Group {
-                if viewModel.wallpapers.isEmpty {
-                    emptyState
-                } else {
-                    wallpaperGrid
+            ScrollView {
+                VStack(alignment: .leading, spacing: 20) {
+                    headerDeck
+
+                    if viewModel.wallpapers.isEmpty {
+                        emptyState
+                    } else {
+                        wallpaperGrid
+                    }
                 }
+                .padding(.horizontal, 28)
+                .padding(.top, 104)
+                .padding(.bottom, 28)
             }
         }
         .onDrop(of: [.fileURL], isTargeted: $isDragTargeted) { providers in
@@ -31,52 +38,86 @@ struct LibraryView: View {
                         Color.white.opacity(0.40),
                         style: StrokeStyle(lineWidth: 2, dash: [10])
                     )
-                    .padding(12)
+                    .padding(20)
                     .allowsHitTesting(false)
             }
         }
     }
 
-    // MARK: - Grid
+    private var headerDeck: some View {
+        HStack(spacing: 16) {
+            VStack(alignment: .leading, spacing: 8) {
+                Text("Library")
+                    .font(.system(size: 34, weight: .bold))
+                    .foregroundStyle(.white)
 
-    private var wallpaperGrid: some View {
-        ScrollView {
-            LazyVGrid(columns: columns, spacing: 12) {
-                ForEach(viewModel.wallpapers) { wallpaper in
-                    WallpaperThumbnailCard(
-                        wallpaper: wallpaper,
-                        isActive: wallpaper.id == viewModel.activeWallpaperID,
-                        isScreenSaver: wallpaper.id == viewModel.screenSaverWallpaperID
-                            && viewModel.screenSaverMode == .separate
-                    )
-                    .onTapGesture {
-                        onWallpaperTap(wallpaper.id)
-                    }
-                }
+                Text("Your imported clips live here. Drag videos into the window or open a wallpaper to preview, apply, rename, or delete it.")
+                    .font(.system(size: 14))
+                    .foregroundStyle(Color.white.opacity(0.68))
+                    .fixedSize(horizontal: false, vertical: true)
             }
-            .padding(20)
+            .frame(maxWidth: .infinity, alignment: .leading)
+
+            metricCard(title: "Clips", value: "\(viewModel.wallpapers.count)", icon: "film.stack.fill")
+
+            metricCard(
+                title: "Desktop",
+                value: viewModel.activeWallpaper?.displayName ?? "Not applied",
+                icon: "display"
+            )
         }
     }
 
-    // MARK: - Empty State
+    private var wallpaperGrid: some View {
+        VStack(alignment: .leading, spacing: 16) {
+            HStack {
+                Text("Imported Wallpapers")
+                    .font(.system(size: 18, weight: .semibold))
+                    .foregroundStyle(.white)
+
+                Spacer()
+
+                Text("Click any card to open the immersive preview.")
+                    .font(.system(size: 12, weight: .medium))
+                    .foregroundStyle(Color.white.opacity(0.58))
+            }
+
+            LazyVGrid(columns: columns, spacing: 12) {
+                ForEach(viewModel.wallpapers) { wallpaper in
+                    Button {
+                        onWallpaperTap(wallpaper.id)
+                    } label: {
+                        WallpaperThumbnailCard(
+                            wallpaper: wallpaper,
+                            isActive: wallpaper.id == viewModel.activeWallpaperID
+                        )
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                    }
+                    .buttonStyle(.plain)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                }
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+        }
+        .padding(20)
+        .glassCard(cornerRadius: 30)
+    }
 
     private var emptyState: some View {
         VStack(spacing: 18) {
-            Image(systemName: isDragTargeted ? "film.stack.fill" : "film.stack")
-                .font(.system(size: 60))
-                .foregroundStyle(
-                    isDragTargeted ? Color.white : Color.white.opacity(0.18)
-                )
+            Image(systemName: isDragTargeted ? "film.stack.fill" : "square.and.arrow.down.on.square.fill")
+                .font(.system(size: 42))
+                .foregroundStyle(isDragTargeted ? Color.white : Color.white.opacity(0.88))
                 .animation(.easeInOut(duration: 0.15), value: isDragTargeted)
 
-            VStack(spacing: 6) {
+            VStack(spacing: 8) {
                 Text("Your Library is Empty")
-                    .font(.system(size: 20, weight: .semibold))
+                    .font(.system(size: 24, weight: .semibold))
                     .foregroundStyle(.white)
 
                 Text("Import .mp4 or .mov files, or drag and drop them here.")
-                    .font(.system(size: 13))
-                    .foregroundStyle(Color.wmTextSecondary)
+                    .font(.system(size: 14))
+                    .foregroundStyle(Color.white.opacity(0.68))
                     .multilineTextAlignment(.center)
             }
 
@@ -84,15 +125,33 @@ struct LibraryView: View {
                 viewModel.importWallpapers()
             }
             .buttonStyle(WallmovePrimaryButtonStyle())
+            .handCursor()
             .padding(.top, 4)
         }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .frame(maxWidth: .infinity)
+        .padding(.vertical, 40)
+        .glassCard(cornerRadius: 30)
         .onDrop(of: [.fileURL], isTargeted: $isDragTargeted) { providers in
             handleDrop(providers)
         }
     }
 
-    // MARK: - Drop Handler
+    private func metricCard(title: String, value: String, icon: String) -> some View {
+        VStack(alignment: .leading, spacing: 10) {
+            Label(title, systemImage: icon)
+                .font(.system(size: 12, weight: .semibold))
+                .foregroundStyle(Color.white.opacity(0.58))
+
+            Text(value)
+                .font(.system(size: 16, weight: .semibold))
+                .foregroundStyle(.white)
+                .lineLimit(2)
+                .frame(maxWidth: 220, alignment: .leading)
+        }
+        .padding(18)
+        .frame(minWidth: 180, alignment: .leading)
+        .glassCard(cornerRadius: 24)
+    }
 
     @discardableResult
     private func handleDrop(_ providers: [NSItemProvider]) -> Bool {

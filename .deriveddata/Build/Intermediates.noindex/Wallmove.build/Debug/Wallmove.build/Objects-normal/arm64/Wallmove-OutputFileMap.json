@@ -1,0 +1,269 @@
+{
+  "" : {
+    "diagnostics" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/Wallmove-primary.dia",
+    "emit-module-dependencies" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/Wallmove-primary-emit-module.d",
+    "emit-module-diagnostics" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/Wallmove-primary-emit-module.dia",
+    "pch" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/Wallmove-primary-Bridging-header.pch",
+    "swift-dependencies" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/Wallmove-primary.swiftdeps"
+  },
+  "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/DerivedSources/GeneratedAssetSymbols.swift" : {
+    "const-values" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/GeneratedAssetSymbols.swiftconstvalues",
+    "dependencies" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/GeneratedAssetSymbols.d",
+    "diagnostics" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/GeneratedAssetSymbols.dia",
+    "index-unit-output-path" : "/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/GeneratedAssetSymbols.o",
+    "llvm-bc" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/GeneratedAssetSymbols.bc",
+    "object" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/GeneratedAssetSymbols.o",
+    "swift-dependencies" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/GeneratedAssetSymbols.swiftdeps",
+    "swiftmodule" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/GeneratedAssetSymbols~partial.swiftmodule"
+  },
+  "/Users/j3da1/Desktop/Wallmove/Wallmove/Models/WallpaperItem.swift" : {
+    "const-values" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/WallpaperItem.swiftconstvalues",
+    "dependencies" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/WallpaperItem.d",
+    "diagnostics" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/WallpaperItem.dia",
+    "index-unit-output-path" : "/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/WallpaperItem.o",
+    "llvm-bc" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/WallpaperItem.bc",
+    "object" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/WallpaperItem.o",
+    "swift-dependencies" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/WallpaperItem.swiftdeps",
+    "swiftmodule" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/WallpaperItem~partial.swiftmodule"
+  },
+  "/Users/j3da1/Desktop/Wallmove/Wallmove/Services/DesktopWallpaperWindowController.swift" : {
+    "const-values" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/DesktopWallpaperWindowController.swiftconstvalues",
+    "dependencies" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/DesktopWallpaperWindowController.d",
+    "diagnostics" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/DesktopWallpaperWindowController.dia",
+    "index-unit-output-path" : "/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/DesktopWallpaperWindowController.o",
+    "llvm-bc" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/DesktopWallpaperWindowController.bc",
+    "object" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/DesktopWallpaperWindowController.o",
+    "swift-dependencies" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/DesktopWallpaperWindowController.swiftdeps",
+    "swiftmodule" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/DesktopWallpaperWindowController~partial.swiftmodule"
+  },
+  "/Users/j3da1/Desktop/Wallmove/Wallmove/Services/LaunchAtLoginController.swift" : {
+    "const-values" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/LaunchAtLoginController.swiftconstvalues",
+    "dependencies" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/LaunchAtLoginController.d",
+    "diagnostics" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/LaunchAtLoginController.dia",
+    "index-unit-output-path" : "/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/LaunchAtLoginController.o",
+    "llvm-bc" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/LaunchAtLoginController.bc",
+    "object" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/LaunchAtLoginController.o",
+    "swift-dependencies" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/LaunchAtLoginController.swiftdeps",
+    "swiftmodule" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/LaunchAtLoginController~partial.swiftmodule"
+  },
+  "/Users/j3da1/Desktop/Wallmove/Wallmove/Services/LoopingVideoPlayerController.swift" : {
+    "const-values" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/LoopingVideoPlayerController.swiftconstvalues",
+    "dependencies" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/LoopingVideoPlayerController.d",
+    "diagnostics" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/LoopingVideoPlayerController.dia",
+    "index-unit-output-path" : "/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/LoopingVideoPlayerController.o",
+    "llvm-bc" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/LoopingVideoPlayerController.bc",
+    "object" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/LoopingVideoPlayerController.o",
+    "swift-dependencies" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/LoopingVideoPlayerController.swiftdeps",
+    "swiftmodule" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/LoopingVideoPlayerController~partial.swiftmodule"
+  },
+  "/Users/j3da1/Desktop/Wallmove/Wallmove/Services/PlaybackSuspensionMonitor.swift" : {
+    "const-values" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/PlaybackSuspensionMonitor.swiftconstvalues",
+    "dependencies" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/PlaybackSuspensionMonitor.d",
+    "diagnostics" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/PlaybackSuspensionMonitor.dia",
+    "index-unit-output-path" : "/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/PlaybackSuspensionMonitor.o",
+    "llvm-bc" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/PlaybackSuspensionMonitor.bc",
+    "object" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/PlaybackSuspensionMonitor.o",
+    "swift-dependencies" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/PlaybackSuspensionMonitor.swiftdeps",
+    "swiftmodule" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/PlaybackSuspensionMonitor~partial.swiftmodule"
+  },
+  "/Users/j3da1/Desktop/Wallmove/Wallmove/Services/PlayerLayerView.swift" : {
+    "const-values" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/PlayerLayerView.swiftconstvalues",
+    "dependencies" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/PlayerLayerView.d",
+    "diagnostics" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/PlayerLayerView.dia",
+    "index-unit-output-path" : "/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/PlayerLayerView.o",
+    "llvm-bc" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/PlayerLayerView.bc",
+    "object" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/PlayerLayerView.o",
+    "swift-dependencies" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/PlayerLayerView.swiftdeps",
+    "swiftmodule" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/PlayerLayerView~partial.swiftmodule"
+  },
+  "/Users/j3da1/Desktop/Wallmove/Wallmove/Services/WallmoveViewModel.swift" : {
+    "const-values" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/WallmoveViewModel.swiftconstvalues",
+    "dependencies" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/WallmoveViewModel.d",
+    "diagnostics" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/WallmoveViewModel.dia",
+    "index-unit-output-path" : "/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/WallmoveViewModel.o",
+    "llvm-bc" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/WallmoveViewModel.bc",
+    "object" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/WallmoveViewModel.o",
+    "swift-dependencies" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/WallmoveViewModel.swiftdeps",
+    "swiftmodule" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/WallmoveViewModel~partial.swiftmodule"
+  },
+  "/Users/j3da1/Desktop/Wallmove/Wallmove/Services/WallpaperEngine.swift" : {
+    "const-values" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/WallpaperEngine.swiftconstvalues",
+    "dependencies" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/WallpaperEngine.d",
+    "diagnostics" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/WallpaperEngine.dia",
+    "index-unit-output-path" : "/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/WallpaperEngine.o",
+    "llvm-bc" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/WallpaperEngine.bc",
+    "object" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/WallpaperEngine.o",
+    "swift-dependencies" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/WallpaperEngine.swiftdeps",
+    "swiftmodule" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/WallpaperEngine~partial.swiftmodule"
+  },
+  "/Users/j3da1/Desktop/Wallmove/Wallmove/Services/WallpaperLibrary.swift" : {
+    "const-values" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/WallpaperLibrary.swiftconstvalues",
+    "dependencies" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/WallpaperLibrary.d",
+    "diagnostics" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/WallpaperLibrary.dia",
+    "index-unit-output-path" : "/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/WallpaperLibrary.o",
+    "llvm-bc" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/WallpaperLibrary.bc",
+    "object" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/WallpaperLibrary.o",
+    "swift-dependencies" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/WallpaperLibrary.swiftdeps",
+    "swiftmodule" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/WallpaperLibrary~partial.swiftmodule"
+  },
+  "/Users/j3da1/Desktop/Wallmove/Wallmove/Support/AppDelegate.swift" : {
+    "const-values" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/AppDelegate.swiftconstvalues",
+    "dependencies" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/AppDelegate.d",
+    "diagnostics" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/AppDelegate.dia",
+    "index-unit-output-path" : "/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/AppDelegate.o",
+    "llvm-bc" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/AppDelegate.bc",
+    "object" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/AppDelegate.o",
+    "swift-dependencies" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/AppDelegate.swiftdeps",
+    "swiftmodule" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/AppDelegate~partial.swiftmodule"
+  },
+  "/Users/j3da1/Desktop/Wallmove/Wallmove/Support/AppDirectories.swift" : {
+    "const-values" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/AppDirectories.swiftconstvalues",
+    "dependencies" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/AppDirectories.d",
+    "diagnostics" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/AppDirectories.dia",
+    "index-unit-output-path" : "/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/AppDirectories.o",
+    "llvm-bc" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/AppDirectories.bc",
+    "object" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/AppDirectories.o",
+    "swift-dependencies" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/AppDirectories.swiftdeps",
+    "swiftmodule" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/AppDirectories~partial.swiftmodule"
+  },
+  "/Users/j3da1/Desktop/Wallmove/Wallmove/Support/DashboardLauncher.swift" : {
+    "const-values" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/DashboardLauncher.swiftconstvalues",
+    "dependencies" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/DashboardLauncher.d",
+    "diagnostics" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/DashboardLauncher.dia",
+    "index-unit-output-path" : "/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/DashboardLauncher.o",
+    "llvm-bc" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/DashboardLauncher.bc",
+    "object" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/DashboardLauncher.o",
+    "swift-dependencies" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/DashboardLauncher.swiftdeps",
+    "swiftmodule" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/DashboardLauncher~partial.swiftmodule"
+  },
+  "/Users/j3da1/Desktop/Wallmove/Wallmove/Support/WindowConfigurationView.swift" : {
+    "const-values" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/WindowConfigurationView.swiftconstvalues",
+    "dependencies" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/WindowConfigurationView.d",
+    "diagnostics" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/WindowConfigurationView.dia",
+    "index-unit-output-path" : "/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/WindowConfigurationView.o",
+    "llvm-bc" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/WindowConfigurationView.bc",
+    "object" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/WindowConfigurationView.o",
+    "swift-dependencies" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/WindowConfigurationView.swiftdeps",
+    "swiftmodule" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/WindowConfigurationView~partial.swiftmodule"
+  },
+  "/Users/j3da1/Desktop/Wallmove/Wallmove/Views/AppToolbar.swift" : {
+    "const-values" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/AppToolbar.swiftconstvalues",
+    "dependencies" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/AppToolbar.d",
+    "diagnostics" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/AppToolbar.dia",
+    "index-unit-output-path" : "/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/AppToolbar.o",
+    "llvm-bc" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/AppToolbar.bc",
+    "object" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/AppToolbar.o",
+    "swift-dependencies" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/AppToolbar.swiftdeps",
+    "swiftmodule" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/AppToolbar~partial.swiftmodule"
+  },
+  "/Users/j3da1/Desktop/Wallmove/Wallmove/Views/DashboardView.swift" : {
+    "const-values" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/DashboardView.swiftconstvalues",
+    "dependencies" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/DashboardView.d",
+    "diagnostics" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/DashboardView.dia",
+    "index-unit-output-path" : "/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/DashboardView.o",
+    "llvm-bc" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/DashboardView.bc",
+    "object" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/DashboardView.o",
+    "swift-dependencies" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/DashboardView.swiftdeps",
+    "swiftmodule" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/DashboardView~partial.swiftmodule"
+  },
+  "/Users/j3da1/Desktop/Wallmove/Wallmove/Views/GlassEffects.swift" : {
+    "const-values" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/GlassEffects.swiftconstvalues",
+    "dependencies" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/GlassEffects.d",
+    "diagnostics" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/GlassEffects.dia",
+    "index-unit-output-path" : "/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/GlassEffects.o",
+    "llvm-bc" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/GlassEffects.bc",
+    "object" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/GlassEffects.o",
+    "swift-dependencies" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/GlassEffects.swiftdeps",
+    "swiftmodule" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/GlassEffects~partial.swiftmodule"
+  },
+  "/Users/j3da1/Desktop/Wallmove/Wallmove/Views/HomeView.swift" : {
+    "const-values" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/HomeView.swiftconstvalues",
+    "dependencies" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/HomeView.d",
+    "diagnostics" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/HomeView.dia",
+    "index-unit-output-path" : "/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/HomeView.o",
+    "llvm-bc" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/HomeView.bc",
+    "object" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/HomeView.o",
+    "swift-dependencies" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/HomeView.swiftdeps",
+    "swiftmodule" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/HomeView~partial.swiftmodule"
+  },
+  "/Users/j3da1/Desktop/Wallmove/Wallmove/Views/LibraryView.swift" : {
+    "const-values" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/LibraryView.swiftconstvalues",
+    "dependencies" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/LibraryView.d",
+    "diagnostics" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/LibraryView.dia",
+    "index-unit-output-path" : "/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/LibraryView.o",
+    "llvm-bc" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/LibraryView.bc",
+    "object" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/LibraryView.o",
+    "swift-dependencies" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/LibraryView.swiftdeps",
+    "swiftmodule" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/LibraryView~partial.swiftmodule"
+  },
+  "/Users/j3da1/Desktop/Wallmove/Wallmove/Views/LoopingVideoView.swift" : {
+    "const-values" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/LoopingVideoView.swiftconstvalues",
+    "dependencies" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/LoopingVideoView.d",
+    "diagnostics" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/LoopingVideoView.dia",
+    "index-unit-output-path" : "/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/LoopingVideoView.o",
+    "llvm-bc" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/LoopingVideoView.bc",
+    "object" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/LoopingVideoView.o",
+    "swift-dependencies" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/LoopingVideoView.swiftdeps",
+    "swiftmodule" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/LoopingVideoView~partial.swiftmodule"
+  },
+  "/Users/j3da1/Desktop/Wallmove/Wallmove/Views/MenuBarView.swift" : {
+    "const-values" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/MenuBarView.swiftconstvalues",
+    "dependencies" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/MenuBarView.d",
+    "diagnostics" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/MenuBarView.dia",
+    "index-unit-output-path" : "/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/MenuBarView.o",
+    "llvm-bc" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/MenuBarView.bc",
+    "object" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/MenuBarView.o",
+    "swift-dependencies" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/MenuBarView.swiftdeps",
+    "swiftmodule" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/MenuBarView~partial.swiftmodule"
+  },
+  "/Users/j3da1/Desktop/Wallmove/Wallmove/Views/SettingsView.swift" : {
+    "const-values" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/SettingsView.swiftconstvalues",
+    "dependencies" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/SettingsView.d",
+    "diagnostics" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/SettingsView.dia",
+    "index-unit-output-path" : "/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/SettingsView.o",
+    "llvm-bc" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/SettingsView.bc",
+    "object" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/SettingsView.o",
+    "swift-dependencies" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/SettingsView.swiftdeps",
+    "swiftmodule" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/SettingsView~partial.swiftmodule"
+  },
+  "/Users/j3da1/Desktop/Wallmove/Wallmove/Views/WallpaperPreviewView.swift" : {
+    "const-values" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/WallpaperPreviewView.swiftconstvalues",
+    "dependencies" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/WallpaperPreviewView.d",
+    "diagnostics" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/WallpaperPreviewView.dia",
+    "index-unit-output-path" : "/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/WallpaperPreviewView.o",
+    "llvm-bc" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/WallpaperPreviewView.bc",
+    "object" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/WallpaperPreviewView.o",
+    "swift-dependencies" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/WallpaperPreviewView.swiftdeps",
+    "swiftmodule" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/WallpaperPreviewView~partial.swiftmodule"
+  },
+  "/Users/j3da1/Desktop/Wallmove/Wallmove/Views/WallpaperRowView.swift" : {
+    "const-values" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/WallpaperRowView.swiftconstvalues",
+    "dependencies" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/WallpaperRowView.d",
+    "diagnostics" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/WallpaperRowView.dia",
+    "index-unit-output-path" : "/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/WallpaperRowView.o",
+    "llvm-bc" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/WallpaperRowView.bc",
+    "object" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/WallpaperRowView.o",
+    "swift-dependencies" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/WallpaperRowView.swiftdeps",
+    "swiftmodule" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/WallpaperRowView~partial.swiftmodule"
+  },
+  "/Users/j3da1/Desktop/Wallmove/Wallmove/Views/WallpaperThumbnailCard.swift" : {
+    "const-values" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/WallpaperThumbnailCard.swiftconstvalues",
+    "dependencies" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/WallpaperThumbnailCard.d",
+    "diagnostics" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/WallpaperThumbnailCard.dia",
+    "index-unit-output-path" : "/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/WallpaperThumbnailCard.o",
+    "llvm-bc" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/WallpaperThumbnailCard.bc",
+    "object" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/WallpaperThumbnailCard.o",
+    "swift-dependencies" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/WallpaperThumbnailCard.swiftdeps",
+    "swiftmodule" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/WallpaperThumbnailCard~partial.swiftmodule"
+  },
+  "/Users/j3da1/Desktop/Wallmove/Wallmove/WallmoveApp.swift" : {
+    "const-values" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/WallmoveApp.swiftconstvalues",
+    "dependencies" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/WallmoveApp.d",
+    "diagnostics" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/WallmoveApp.dia",
+    "index-unit-output-path" : "/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/WallmoveApp.o",
+    "llvm-bc" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/WallmoveApp.bc",
+    "object" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/WallmoveApp.o",
+    "swift-dependencies" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/WallmoveApp.swiftdeps",
+    "swiftmodule" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/WallmoveApp~partial.swiftmodule"
+  }
+}

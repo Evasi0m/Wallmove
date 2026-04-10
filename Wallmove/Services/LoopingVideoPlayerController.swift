@@ -1,6 +1,4 @@
 import AVFoundation
-import AppKit
-import Combine
 
 @MainActor
 final class LoopingVideoPlayerController: ObservableObject {
@@ -11,6 +9,10 @@ final class LoopingVideoPlayerController: ObservableObject {
     private var isPaused = false
 
     func attach(to view: PlayerLayerView) {
+        if attachedView !== view {
+            attachedView?.playerLayer.player = nil
+        }
+
         attachedView = view
         view.playerLayer.player = player
     }
@@ -21,13 +23,10 @@ final class LoopingVideoPlayerController: ObservableObject {
             return
         }
 
+        tearDownCurrentPlayer()
         currentURL = url
 
         guard let url else {
-            looper = nil
-            player?.pause()
-            player = nil
-            attachedView?.playerLayer.player = nil
             return
         }
 
@@ -36,6 +35,7 @@ final class LoopingVideoPlayerController: ObservableObject {
         queuePlayer.isMuted = true
         queuePlayer.preventsDisplaySleepDuringVideoPlayback = false
         queuePlayer.actionAtItemEnd = .none
+        queuePlayer.automaticallyWaitsToMinimizeStalling = false
 
         looper = AVPlayerLooper(player: queuePlayer, templateItem: item)
         player = queuePlayer
@@ -58,5 +58,13 @@ final class LoopingVideoPlayerController: ObservableObject {
         } else {
             player.play()
         }
+    }
+
+    private func tearDownCurrentPlayer() {
+        looper = nil
+        player?.pause()
+        player?.removeAllItems()
+        attachedView?.playerLayer.player = nil
+        player = nil
     }
 }

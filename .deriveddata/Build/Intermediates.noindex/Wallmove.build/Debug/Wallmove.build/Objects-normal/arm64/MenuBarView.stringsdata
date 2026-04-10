@@ -1,0 +1,56 @@
+{
+  "source": "/Users/j3da1/Desktop/Wallmove/Wallmove/Views/MenuBarView.swift",
+  "tables": {
+    "Localizable": [
+      {
+        "comment": "",
+        "key": "Open Dashboard",
+        "location": {
+          "startingColumn": 20,
+          "startingLine": 8
+        }
+      },
+      {
+        "comment": "",
+        "key": "Launch at Login",
+        "location": {
+          "startingColumn": 17,
+          "startingLine": 16
+        }
+      },
+      {
+        "comment": "",
+        "key": "Quit Wallmove",
+        "location": {
+          "startingColumn": 20,
+          "startingLine": 29
+        }
+      },
+      {
+        "comment": "",
+        "key": "Status",
+        "location": {
+          "startingColumn": 18,
+          "startingLine": 41
+        }
+      },
+      {
+        "comment": "",
+        "key": "No desktop wallpaper set",
+        "location": {
+          "startingColumn": 22,
+          "startingLine": 55
+        }
+      },
+      {
+        "comment": "",
+        "key": "%lld wallpaper%@ imported",
+        "location": {
+          "startingColumn": 18,
+          "startingLine": 60
+        }
+      }
+    ]
+  },
+  "version": 1
+}

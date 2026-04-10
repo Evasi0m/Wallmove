@@ -1,0 +1,112 @@
+{
+  "source": "/Users/j3da1/Desktop/Wallmove/Wallmove/Views/HomeView.swift",
+  "tables": {
+    "Localizable": [
+      {
+        "comment": "",
+        "key": "Selected Wallpaper",
+        "location": {
+          "startingColumn": 22,
+          "startingLine": 94
+        }
+      },
+      {
+        "comment": "",
+        "key": "Imported %@ and stored locally inside Wallmove so the live wallpaper keeps working even if the original file is removed.",
+        "location": {
+          "startingColumn": 22,
+          "startingLine": 104
+        }
+      },
+      {
+        "comment": "",
+        "key": "Active on Desktop",
+        "location": {
+          "startingColumn": 27,
+          "startingLine": 138
+        }
+      },
+      {
+        "comment": "",
+        "key": "Open Preview",
+        "location": {
+          "startingColumn": 27,
+          "startingLine": 122
+        }
+      },
+      {
+        "comment": "",
+        "key": "Apply to Desktop",
+        "location": {
+          "startingColumn": 31,
+          "startingLine": 131
+        }
+      },
+      {
+        "comment": "",
+        "key": "Live Status",
+        "location": {
+          "startingColumn": 18,
+          "startingLine": 154
+        }
+      },
+      {
+        "comment": "",
+        "key": "%lld wallpapers",
+        "location": {
+          "startingColumn": 22,
+          "startingLine": 195
+        }
+      },
+      {
+        "comment": "",
+        "key": "Quick Select",
+        "location": {
+          "startingColumn": 26,
+          "startingLine": 185
+        }
+      },
+      {
+        "comment": "",
+        "key": "Switch clips with one click or use your keyboard arrows.",
+        "location": {
+          "startingColumn": 26,
+          "startingLine": 188
+        }
+      },
+      {
+        "comment": "",
+        "key": "%@%@",
+        "location": {
+          "startingColumn": 15,
+          "startingLine": 282
+        }
+      },
+      {
+        "comment": "",
+        "key": "Import Videos",
+        "location": {
+          "startingColumn": 24,
+          "startingLine": 303
+        }
+      },
+      {
+        "comment": "",
+        "key": "Build Your First Live Wallpaper",
+        "location": {
+          "startingColumn": 26,
+          "startingLine": 293
+        }
+      },
+      {
+        "comment": "",
+        "key": "Import .mp4 or .mov clips and Wallmove will copy them into local storage so your desktop keeps playing smoothly.",
+        "location": {
+          "startingColumn": 26,
+          "startingLine": 297
+        }
+      }
+    ]
+  },
+  "version": 1
+}

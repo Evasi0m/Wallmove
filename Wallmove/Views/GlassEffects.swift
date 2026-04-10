@@ -1,20 +1,16 @@
+import AppKit
 import SwiftUI
 
 // MARK: - App Color Palette
 
 extension Color {
-    /// Primary window background — very dark charcoal
-    static let wmBackground = Color(red: 0.11, green: 0.11, blue: 0.11)
-    /// Slightly elevated surface (cards, rows)
-    static let wmSurface = Color(red: 0.17, green: 0.17, blue: 0.17)
-    /// Hover / pressed state
-    static let wmSurfaceHover = Color(red: 0.22, green: 0.22, blue: 0.22)
-    /// Subtle border
+    static let wmBackground = Color(red: 0.06, green: 0.07, blue: 0.08)
+    static let wmSurface = Color(red: 0.15, green: 0.17, blue: 0.18)
+    static let wmSurfaceHover = Color(red: 0.22, green: 0.24, blue: 0.26)
     static let wmBorder = Color.white.opacity(0.10)
-    /// Primary text
     static let wmText = Color.white
-    /// Secondary text
     static let wmTextSecondary = Color.white.opacity(0.45)
+    static let wmShadow = Color.black.opacity(0.30)
 }
 
 // MARK: - Primary Button Style
@@ -27,6 +23,7 @@ struct WallmovePrimaryButtonStyle: ButtonStyle {
             .padding(.horizontal, 20)
             .padding(.vertical, 10)
             .background(Color.white, in: Capsule())
+            .shadow(color: Color.black.opacity(0.18), radius: 18, y: 8)
             .opacity(configuration.isPressed ? 0.75 : 1.0)
     }
 }
@@ -39,6 +36,7 @@ struct GlassCardModifier: ViewModifier {
     func body(content: Content) -> some View {
         content
             .background(glassBackground(cornerRadius: cornerRadius))
+            .shadow(color: Color.black.opacity(0.28), radius: 32, y: 18)
     }
 
     private func glassBackground(cornerRadius: CGFloat) -> some View {
@@ -78,7 +76,7 @@ struct GlassCapsuleModifier: ViewModifier {
             .background(
                 ZStack {
                     Capsule().fill(.ultraThinMaterial)
-                    Capsule().fill(color.opacity(0.15))
+                    Capsule().fill(color.opacity(0.12))
                     Capsule()
                         .strokeBorder(
                             LinearGradient(
@@ -139,5 +137,15 @@ extension View {
 
     func glassButton(cornerRadius: CGFloat = 8) -> some View {
         modifier(GlassButtonBackground(cornerRadius: cornerRadius))
+    }
+
+    func handCursor() -> some View {
+        onHover { inside in
+            if inside {
+                NSCursor.pointingHand.push()
+            } else {
+                NSCursor.pop()
+            }
+        }
     }
 }

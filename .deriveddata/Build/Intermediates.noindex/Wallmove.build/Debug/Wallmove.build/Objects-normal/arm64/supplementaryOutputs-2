@@ -1,0 +1,23 @@
+{
+  "/Users/j3da1/Desktop/Wallmove/Wallmove/Services/LoopingVideoPlayerController.swift" : {
+    "const-values" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/LoopingVideoPlayerController.swiftconstvalues",
+    "dependencies" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/LoopingVideoPlayerController.d",
+    "diagnostics" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/LoopingVideoPlayerController.dia",
+    "object" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/LoopingVideoPlayerController.o",
+    "swift-dependencies" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/LoopingVideoPlayerController.swiftdeps"
+  },
+  "/Users/j3da1/Desktop/Wallmove/Wallmove/Services/PlaybackSuspensionMonitor.swift" : {
+    "const-values" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/PlaybackSuspensionMonitor.swiftconstvalues",
+    "dependencies" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/PlaybackSuspensionMonitor.d",
+    "diagnostics" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/PlaybackSuspensionMonitor.dia",
+    "object" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/PlaybackSuspensionMonitor.o",
+    "swift-dependencies" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/PlaybackSuspensionMonitor.swiftdeps"
+  },
+  "/Users/j3da1/Desktop/Wallmove/Wallmove/Services/PlayerLayerView.swift" : {
+    "const-values" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/PlayerLayerView.swiftconstvalues",
+    "dependencies" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/PlayerLayerView.d",
+    "diagnostics" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/PlayerLayerView.dia",
+    "object" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/PlayerLayerView.o",
+    "swift-dependencies" : "/Users/j3da1/Desktop/Wallmove/.deriveddata/Build/Intermediates.noindex/Wallmove.build/Debug/Wallmove.build/Objects-normal/arm64/PlayerLayerView.swiftdeps"
+  }
+}

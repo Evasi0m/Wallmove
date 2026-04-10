@@ -5,49 +5,33 @@ import Foundation
 
 @MainActor
 final class WallpaperLibrary {
+    enum LibraryError: LocalizedError {
+        case unsupportedVideoFile(URL)
+        case wallpaperNotFound(UUID)
+
+        var errorDescription: String? {
+            switch self {
+            case .unsupportedVideoFile(let url):
+                return "\"\(url.lastPathComponent)\" is not a supported video. Please use .mp4 or .mov files."
+            case .wallpaperNotFound:
+                return "The selected wallpaper could not be found."
+            }
+        }
+    }
+
     private struct PersistedLibrary: Codable {
         var wallpapers: [WallpaperItem]
         var activeWallpaperID: UUID?
-        var screenSaverMode: ScreenSaverMode
-        var screenSaverWallpaperID: UUID?
 
-        init(
-            wallpapers: [WallpaperItem],
-            activeWallpaperID: UUID?,
-            screenSaverMode: ScreenSaverMode,
-            screenSaverWallpaperID: UUID?
-        ) {
+        init(wallpapers: [WallpaperItem] = [], activeWallpaperID: UUID? = nil) {
             self.wallpapers = wallpapers
             self.activeWallpaperID = activeWallpaperID
-            self.screenSaverMode = screenSaverMode
-            self.screenSaverWallpaperID = screenSaverWallpaperID
         }
 
         init(from decoder: Decoder) throws {
             let container = try decoder.container(keyedBy: CodingKeys.self)
             wallpapers = try container.decodeIfPresent([WallpaperItem].self, forKey: .wallpapers) ?? []
             activeWallpaperID = try container.decodeIfPresent(UUID.self, forKey: .activeWallpaperID)
-            screenSaverMode = try container.decodeIfPresent(ScreenSaverMode.self, forKey: .screenSaverMode) ?? .off
-            screenSaverWallpaperID = try container.decodeIfPresent(UUID.self, forKey: .screenSaverWallpaperID)
-        }
-    }
-
-    enum ScreenSaverMode: String, Codable, CaseIterable, Identifiable {
-        case off
-        case mirrorDesktop
-        case separate
-
-        var id: String { rawValue }
-
-        var title: String {
-            switch self {
-            case .off:
-                return "Off"
-            case .mirrorDesktop:
-                return "Same as Desktop"
-            case .separate:
-                return "Different Wallpaper"
-            }
         }
     }
 
@@ -62,14 +46,6 @@ final class WallpaperLibrary {
         persistedLibrary.activeWallpaperID
     }
 
-    var screenSaverMode: ScreenSaverMode {
-        persistedLibrary.screenSaverMode
-    }
-
-    var screenSaverWallpaperID: UUID? {
-        persistedLibrary.screenSaverWallpaperID
-    }
-
     init() {
         do {
             try AppDirectories.prepare()
@@ -77,12 +53,7 @@ final class WallpaperLibrary {
             try cleanMissingFiles()
             try save()
         } catch {
-            persistedLibrary = PersistedLibrary(
-                wallpapers: [],
-                activeWallpaperID: nil,
-                screenSaverMode: .off,
-                screenSaverWallpaperID: nil
-            )
+            persistedLibrary = PersistedLibrary()
         }
     }
 
@@ -106,27 +77,17 @@ final class WallpaperLibrary {
         return item.videoURL(in: AppDirectories.wallpapers)
     }
 
-    func screenSaverWallpaperURL() -> URL? {
-        switch persistedLibrary.screenSaverMode {
-        case .off:
-            return nil
-        case .mirrorDesktop:
-            return activeWallpaperURL()
-        case .separate:
-            guard let item = wallpaper(with: persistedLibrary.screenSaverWallpaperID) else {
-                return nil
-            }
-
-            return item.videoURL(in: AppDirectories.wallpapers)
-        }
-    }
-
     func importVideos(from sourceURLs: [URL]) throws -> [WallpaperItem] {
         try AppDirectories.prepare()
 
         var importedItems: [WallpaperItem] = []
 
         for sourceURL in sourceURLs {
+            let cleanedExtension = sourceURL.pathExtension.lowercased()
+            guard ["mp4", "mov"].contains(cleanedExtension) else {
+                throw LibraryError.unsupportedVideoFile(sourceURL)
+            }
+
             let accessedSecurityScope = sourceURL.startAccessingSecurityScopedResource()
             defer {
                 if accessedSecurityScope {
@@ -135,7 +96,6 @@ final class WallpaperLibrary {
             }
 
             let wallpaperID = UUID()
-            let cleanedExtension = sourceURL.pathExtension.isEmpty ? "mp4" : sourceURL.pathExtension
             let destinationVideoURL = AppDirectories.wallpapers
                 .appendingPathComponent(wallpaperID.uuidString, isDirectory: false)
                 .appendingPathExtension(cleanedExtension)
@@ -165,38 +125,26 @@ final class WallpaperLibrary {
     }
 
     func setActiveWallpaper(id: UUID?) throws {
+        if let id, wallpaper(with: id) == nil {
+            throw LibraryError.wallpaperNotFound(id)
+        }
+
         persistedLibrary.activeWallpaperID = id
         try save()
     }
 
-    func setScreenSaverMode(_ mode: ScreenSaverMode) throws {
-        persistedLibrary.screenSaverMode = mode
-        if mode != .separate {
-            persistedLibrary.screenSaverWallpaperID = nil
-        } else if persistedLibrary.screenSaverWallpaperID == nil {
-            persistedLibrary.screenSaverWallpaperID = persistedLibrary.activeWallpaperID
-        }
-
-        try save()
-    }
-
-    func setScreenSaverWallpaper(id: UUID?) throws {
-        persistedLibrary.screenSaverWallpaperID = id
-        if id != nil {
-            persistedLibrary.screenSaverMode = .separate
-        }
-        try save()
-    }
-
     func renameWallpaper(id: UUID, to newName: String) throws {
-        guard let index = persistedLibrary.wallpapers.firstIndex(where: { $0.id == id }) else { return }
+        guard let index = persistedLibrary.wallpapers.firstIndex(where: { $0.id == id }) else {
+            throw LibraryError.wallpaperNotFound(id)
+        }
+
         persistedLibrary.wallpapers[index].displayName = newName
         try save()
     }
 
     func deleteWallpaper(id: UUID) throws {
         guard let item = wallpaper(with: id) else {
-            return
+            throw LibraryError.wallpaperNotFound(id)
         }
 
         let videoURL = item.videoURL(in: AppDirectories.wallpapers)
@@ -212,12 +160,6 @@ final class WallpaperLibrary {
         persistedLibrary.wallpapers.removeAll(where: { $0.id == id })
         if persistedLibrary.activeWallpaperID == id {
             persistedLibrary.activeWallpaperID = nil
-        }
-        if persistedLibrary.screenSaverWallpaperID == id {
-            persistedLibrary.screenSaverWallpaperID = nil
-            if persistedLibrary.screenSaverMode == .separate {
-                persistedLibrary.screenSaverMode = .off
-            }
         }
 
         try save()
@@ -238,25 +180,14 @@ final class WallpaperLibrary {
             }
         }
 
-        persistedLibrary = PersistedLibrary(
-            wallpapers: [],
-            activeWallpaperID: nil,
-            screenSaverMode: .off,
-            screenSaverWallpaperID: nil
-        )
-
+        persistedLibrary = PersistedLibrary()
         try save()
     }
 
     private static func loadPersistedLibrary() throws -> PersistedLibrary {
         let url = AppDirectories.libraryMetadata
         guard FileManager.default.fileExists(atPath: url.path) else {
-            return PersistedLibrary(
-                wallpapers: [],
-                activeWallpaperID: nil,
-                screenSaverMode: .off,
-                screenSaverWallpaperID: nil
-            )
+            return PersistedLibrary()
         }
 
         let data = try Data(contentsOf: url)
@@ -273,16 +204,6 @@ final class WallpaperLibrary {
         if let activeWallpaperID,
            wallpaper(with: activeWallpaperID) == nil {
             persistedLibrary.activeWallpaperID = nil
-        }
-
-        if let screenSaverWallpaperID,
-           wallpaper(with: screenSaverWallpaperID) == nil {
-            persistedLibrary.screenSaverWallpaperID = nil
-        }
-
-        if persistedLibrary.screenSaverMode == .separate,
-           persistedLibrary.screenSaverWallpaperID == nil {
-            persistedLibrary.screenSaverMode = .off
         }
     }
 

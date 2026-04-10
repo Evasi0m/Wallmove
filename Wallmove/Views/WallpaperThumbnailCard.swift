@@ -3,77 +3,74 @@ import SwiftUI
 struct WallpaperThumbnailCard: View {
     let wallpaper: WallpaperItem
     let isActive: Bool
-    let isScreenSaver: Bool
 
     @State private var isHovering = false
 
     var body: some View {
         ZStack(alignment: .bottomLeading) {
-            // ── Thumbnail ───────────────────────────────
             thumbnailImage
                 .aspectRatio(16 / 9, contentMode: .fill)
                 .clipped()
                 .overlay {
-                    if isHovering {
-                        Color.black.opacity(0.30)
-                            .transition(.opacity)
-                    }
+                    LinearGradient(
+                        colors: [
+                            Color.black.opacity(isHovering ? 0.12 : 0.24),
+                            Color.black.opacity(0.60)
+                        ],
+                        startPoint: .top,
+                        endPoint: .bottom
+                    )
                 }
 
-            // ── Play icon on hover ──────────────────────
-            if isHovering {
-                Image(systemName: "play.circle.fill")
-                    .font(.system(size: 34))
-                    .foregroundStyle(Color.white.opacity(0.9))
-                    .shadow(color: .black.opacity(0.5), radius: 8, y: 2)
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
-                    .transition(.opacity)
-            }
-
-            // ── Bottom gradient + name ──────────────────
-            LinearGradient(
-                colors: [.clear, .black.opacity(0.80)],
-                startPoint: .center,
-                endPoint: .bottom
-            )
-            .frame(maxWidth: .infinity)
-            .overlay(alignment: .bottomLeading) {
-                Text(wallpaper.displayName)
-                    .font(.system(size: 12, weight: .semibold))
-                    .foregroundStyle(.white)
-                    .lineLimit(1)
-                    .padding(.horizontal, 10)
-                    .padding(.bottom, 8)
-            }
-
-            // ── Status badges (top-right) ───────────────
-            VStack(alignment: .trailing, spacing: 4) {
-                HStack {
-                    Spacer()
+            VStack(alignment: .leading, spacing: 10) {
+                HStack(spacing: 6) {
                     if isActive {
                         statusBadge("Desktop", color: .green)
                     }
-                    if isScreenSaver {
-                        statusBadge("Screen Saver", color: .blue)
-                    }
                 }
-                Spacer()
+
+                Spacer(minLength: 0)
+
+                VStack(alignment: .leading, spacing: 6) {
+                    Text(wallpaper.displayName)
+                        .font(.system(size: 14, weight: .semibold))
+                        .foregroundStyle(.white)
+                        .lineLimit(1)
+                        .truncationMode(.tail)
+
+                    Text(wallpaper.importedAt.formatted(date: .abbreviated, time: .omitted))
+                        .font(.system(size: 11))
+                        .foregroundStyle(Color.white.opacity(0.58))
+                }
             }
-            .padding(8)
+            .padding(14)
         }
-        .frame(height: 126)
-        .clipShape(RoundedRectangle(cornerRadius: 12))
+        .frame(maxWidth: .infinity)
+        .frame(height: 156)
+        .clipShape(RoundedRectangle(cornerRadius: 22))
         .overlay(
-            RoundedRectangle(cornerRadius: 12)
+            RoundedRectangle(cornerRadius: 22)
                 .strokeBorder(
-                    isActive ? Color.green.opacity(0.70) : Color.white.opacity(0.09),
-                    lineWidth: isActive ? 2 : 1
+                    LinearGradient(
+                        colors: [
+                            Color.white.opacity(isHovering ? 0.22 : 0.14),
+                            Color.white.opacity(0.06)
+                        ],
+                        startPoint: .topLeading,
+                        endPoint: .bottomTrailing
+                    ),
+                    lineWidth: 1
                 )
         )
-        .scaleEffect(isHovering ? 1.025 : 1.0)
-        .animation(.easeOut(duration: 0.14), value: isHovering)
+        .shadow(
+            color: isActive ? Color.green.opacity(0.16) : Color.black.opacity(0.22),
+            radius: isActive ? 20 : 14,
+            y: 12
+        )
+        .scaleEffect(isHovering ? 1.02 : 1.0)
+        .animation(.spring(response: 0.24, dampingFraction: 0.84), value: isHovering)
         .onHover { isHovering = $0 }
-        .cursor(.pointingHand)
+        .handCursor()
     }
 
     @ViewBuilder
@@ -100,16 +97,6 @@ struct WallpaperThumbnailCard: View {
             .foregroundStyle(.white)
             .padding(.horizontal, 7)
             .padding(.vertical, 3)
-            .background(color.opacity(0.85), in: Capsule())
-    }
-}
-
-// MARK: - Cursor helper
-
-private extension View {
-    func cursor(_ cursor: NSCursor) -> some View {
-        onHover { inside in
-            if inside { cursor.push() } else { NSCursor.pop() }
-        }
+            .glassCapsule(color: color)
     }
 }

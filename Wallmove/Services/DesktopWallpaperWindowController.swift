@@ -3,20 +3,13 @@ import CoreGraphics
 
 @MainActor
 final class DesktopWallpaperWindowController {
-    enum Placement {
-        case desktop
-        case screenSaver
-    }
-
     private(set) var screen: NSScreen
     private let playerView = PlayerLayerView(frame: .zero)
     private let playerController = LoopingVideoPlayerController()
     private let window: DesktopWallpaperWindow
-    private let placement: Placement
 
-    init(screen: NSScreen, placement: Placement) {
+    init(screen: NSScreen) {
         self.screen = screen
-        self.placement = placement
         self.window = DesktopWallpaperWindow(
             contentRect: screen.frame,
             styleMask: [.borderless],
@@ -40,12 +33,7 @@ final class DesktopWallpaperWindowController {
         if url == nil {
             window.orderOut(nil)
         } else {
-            switch placement {
-            case .desktop:
-                window.orderBack(nil)
-            case .screenSaver:
-                window.orderFrontRegardless()
-            }
+            window.orderBack(nil)
         }
     }
 
@@ -60,13 +48,8 @@ final class DesktopWallpaperWindowController {
         window.ignoresMouseEvents = true
         window.collectionBehavior = [.canJoinAllSpaces, .stationary, .ignoresCycle, .fullScreenAuxiliary]
 
-        switch placement {
-        case .desktop:
-            let desktopIconLevel = Int(CGWindowLevelForKey(.desktopIconWindow))
-            window.level = NSWindow.Level(rawValue: desktopIconLevel - 1)
-        case .screenSaver:
-            window.level = .screenSaver
-        }
+        let desktopIconLevel = Int(CGWindowLevelForKey(.desktopIconWindow))
+        window.level = NSWindow.Level(rawValue: desktopIconLevel - 1)
 
         playerView.frame = window.contentView?.bounds ?? .zero
         playerView.autoresizingMask = [.width, .height]

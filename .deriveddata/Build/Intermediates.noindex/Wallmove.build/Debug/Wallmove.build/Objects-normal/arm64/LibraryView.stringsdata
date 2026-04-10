@@ -1,0 +1,64 @@
+{
+  "source": "/Users/j3da1/Desktop/Wallmove/Wallmove/Views/LibraryView.swift",
+  "tables": {
+    "Localizable": [
+      {
+        "comment": "",
+        "key": "Library",
+        "location": {
+          "startingColumn": 22,
+          "startingLine": 50
+        }
+      },
+      {
+        "comment": "",
+        "key": "Your imported clips live here. Drag videos into the window or open a wallpaper to preview, apply, rename, or delete it.",
+        "location": {
+          "startingColumn": 22,
+          "startingLine": 54
+        }
+      },
+      {
+        "comment": "",
+        "key": "Imported Wallpapers",
+        "location": {
+          "startingColumn": 22,
+          "startingLine": 74
+        }
+      },
+      {
+        "comment": "",
+        "key": "Click any card to open the immersive preview.",
+        "location": {
+          "startingColumn": 22,
+          "startingLine": 80
+        }
+      },
+      {
+        "comment": "",
+        "key": "Import Videos",
+        "location": {
+          "startingColumn": 20,
+          "startingLine": 124
+        }
+      },
+      {
+        "comment": "",
+        "key": "Your Library is Empty",
+        "location": {
+          "startingColumn": 22,
+          "startingLine": 114
+        }
+      },
+      {
+        "comment": "",
+        "key": "Import .mp4 or .mov files, or drag and drop them here.",
+        "location": {
+          "startingColumn": 22,
+          "startingLine": 118
+        }
+      }
+    ]
+  },
+  "version": 1
+}

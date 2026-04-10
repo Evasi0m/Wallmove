@@ -1,3 +1,4 @@
+import AppKit
 import SwiftUI
 
 // MARK: - Window Metrics
@@ -26,56 +27,34 @@ struct DashboardView: View {
 
     var body: some View {
         ZStack(alignment: .top) {
-            Color.wmBackground.ignoresSafeArea()
+            dashboardBackdrop
 
-            // ── Tab content ──────────────────────────────
-            Group {
-                switch activeTab {
-                case .home:
-                    HomeView(viewModel: viewModel, onOpenPreview: openPreview)
-                        .frame(maxWidth: .infinity, maxHeight: .infinity)
-                        .ignoresSafeArea()
-                case .library:
-                    VStack(spacing: 0) {
-                        Spacer().frame(height: 52)
-                        LibraryView(viewModel: viewModel, onWallpaperTap: { id in
-                            viewModel.selectWallpaper(id: id)
-                            openPreview()
-                        })
-                        .frame(maxWidth: .infinity, maxHeight: .infinity)
-                    }
-                case .settings:
-                    VStack(spacing: 0) {
-                        Spacer().frame(height: 52)
-                        SettingsView(viewModel: viewModel)
-                            .frame(maxWidth: .infinity, maxHeight: .infinity)
-                    }
-                }
-            }
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            currentContent
+                .id(activeTab)
+                .transition(.opacity.combined(with: .scale(scale: 0.985)))
 
-            // ── Toolbar (always on top) ───────────────────
             AppToolbar(activeTab: $activeTab, onImport: viewModel.importWallpapers)
-                .background {
-                    if activeTab == .home {
-                        // Gradient so nav text stays readable over hero video
-                        LinearGradient(
-                            colors: [Color.black.opacity(0.60), .clear],
-                            startPoint: .top,
-                            endPoint: .bottom
-                        )
-                        .frame(height: 90)
-                    } else {
-                        Color.wmBackground
-                    }
-                }
         }
-        // ── Full-screen preview overlay ──────────────────
+        .preferredColorScheme(.dark)
+        .wallmoveWindowChrome()
+        .animation(.easeInOut(duration: 0.2), value: activeTab)
+        .onAppear {
+            syncPreviewVisibility()
+        }
+        .onChange(of: activeTab) { _, _ in
+            syncPreviewVisibility()
+        }
+        .onChange(of: showingPreview) { _, _ in
+            syncPreviewVisibility()
+        }
+        .onDisappear {
+            viewModel.setPreviewPresentation(isVisible: false)
+        }
         .overlay {
             if showingPreview, viewModel.selectedWallpaper != nil {
                 WallpaperPreviewView(
                     viewModel: viewModel,
-                    onDismiss: { showingPreview = false }
+                    onDismiss: dismissPreview
                 )
                 .transition(.opacity.animation(.easeInOut(duration: 0.18)))
             }
@@ -87,9 +66,82 @@ struct DashboardView: View {
         })
     }
 
+    private var dashboardBackdrop: some View {
+        ZStack {
+            if let image = selectedThumbnailImage {
+                Image(nsImage: image)
+                    .resizable()
+                    .scaledToFill()
+                    .blur(radius: 60)
+                    .saturation(0.82)
+                    .overlay(Color.black.opacity(activeTab == .home ? 0.28 : 0.54))
+                    .ignoresSafeArea()
+            } else {
+                LinearGradient(
+                    colors: [
+                        Color(red: 0.20, green: 0.24, blue: 0.27),
+                        Color(red: 0.07, green: 0.08, blue: 0.10)
+                    ],
+                    startPoint: .topLeading,
+                    endPoint: .bottomTrailing
+                )
+                .ignoresSafeArea()
+            }
+
+            LinearGradient(
+                colors: [.clear, .black.opacity(0.68)],
+                startPoint: .top,
+                endPoint: .bottom
+            )
+            .ignoresSafeArea()
+        }
+    }
+
+    @ViewBuilder
+    private var currentContent: some View {
+        switch activeTab {
+        case .home:
+            HomeView(viewModel: viewModel, onOpenPreview: openPreview)
+                .id(viewModel.previewSurfaceID)
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .ignoresSafeArea()
+        case .library:
+            LibraryView(viewModel: viewModel, onWallpaperTap: { id in
+                viewModel.selectWallpaper(id: id)
+                openPreview()
+            })
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+        case .settings:
+            SettingsView(viewModel: viewModel)
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+        }
+    }
+
+    private var selectedThumbnailImage: NSImage? {
+        guard let wallpaper = viewModel.selectedWallpaper ?? viewModel.activeWallpaper,
+              let thumbnailURL = wallpaper.thumbnailURL(in: AppDirectories.thumbnails)
+        else {
+            return nil
+        }
+
+        return NSImage(contentsOf: thumbnailURL)
+    }
+
     private func openPreview() {
         guard viewModel.selectedWallpaper != nil else { return }
         showingPreview = true
+    }
+
+    private func dismissPreview() {
+        showingPreview = false
+
+        DispatchQueue.main.async {
+            viewModel.rebindPreviewSurface()
+        }
+    }
+
+    private func syncPreviewVisibility() {
+        viewModel.setPreviewPresentation(isVisible: activeTab == .home || showingPreview)
     }
 
     private var errorIsPresented: Binding<Bool> {
@@ -100,6 +152,15 @@ struct DashboardView: View {
     }
 }
 
-#Preview {
-    DashboardView(viewModel: WallmoveViewModel())
+private extension View {
+    @ViewBuilder
+    func wallmoveWindowChrome() -> some View {
+        if #available(macOS 15.0, *) {
+            self
+                .toolbar(removing: .title)
+                .toolbarBackgroundVisibility(.hidden, for: .windowToolbar)
+        } else {
+            self
+        }
+    }
 }

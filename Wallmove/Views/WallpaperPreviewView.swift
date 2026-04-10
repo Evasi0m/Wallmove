@@ -2,13 +2,10 @@ import AVFoundation
 import CoreMedia
 import SwiftUI
 
-// MARK: - Full-Screen Preview
-
 struct WallpaperPreviewView: View {
     @ObservedObject var viewModel: WallmoveViewModel
     let onDismiss: () -> Void
 
-    @State private var showScreenSaverPanel = false
     @State private var showDeleteConfirmation = false
     @State private var isRenaming = false
     @State private var renameText = ""
@@ -21,7 +18,6 @@ struct WallpaperPreviewView: View {
 
     var body: some View {
         ZStack(alignment: .bottom) {
-            // ── Full-screen video ─────────────────────
             Color.black.ignoresSafeArea()
 
             LoopingVideoView(
@@ -30,7 +26,6 @@ struct WallpaperPreviewView: View {
             )
             .ignoresSafeArea()
 
-            // ── Bottom HUD ────────────────────────────
             if let wp = wallpaper {
                 bottomHUD(for: wp)
                     .padding(.horizontal, 24)
@@ -53,16 +48,13 @@ struct WallpaperPreviewView: View {
         } message: {
             Text("This will permanently remove the video file from Wallmove.")
         }
-        .onChange(of: viewModel.selectedWallpaper == nil) { isNil in
+        .onChange(of: viewModel.selectedWallpaper == nil) { _, isNil in
             if isNil { onDismiss() }
         }
     }
 
-    // MARK: - Bottom HUD
-
     private func bottomHUD(for wp: WallpaperItem) -> some View {
         HStack(spacing: 0) {
-            // Back
             Button(action: onDismiss) {
                 Image(systemName: "chevron.left")
                     .font(.system(size: 15, weight: .semibold))
@@ -70,43 +62,29 @@ struct WallpaperPreviewView: View {
                     .frame(width: 38, height: 38)
             }
             .buttonStyle(.plain)
+            .handCursor()
 
-            // Separator
             Rectangle()
                 .fill(Color.white.opacity(0.14))
                 .frame(width: 1, height: 28)
                 .padding(.horizontal, 14)
 
-            // Name + metadata
             nameMetadataSection(for: wp)
 
             Spacer(minLength: 12)
 
-            // Action buttons
-            HStack(spacing: 6) {
-                hudIconButton("display.2") {
-                    showScreenSaverPanel.toggle()
-                }
-                .popover(isPresented: $showScreenSaverPanel, arrowEdge: .top) {
-                    ScreenSaverPopoverView(viewModel: viewModel)
-                }
-
-                hudIconButton("trash") {
-                    showDeleteConfirmation = true
-                }
+            hudIconButton("trash") {
+                showDeleteConfirmation = true
             }
             .padding(.trailing, 12)
 
-            // Apply button
             applyButton(for: wp)
         }
         .padding(.horizontal, 18)
         .padding(.vertical, 12)
-        .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 20))
+        .glassCard(cornerRadius: 20)
         .environment(\.colorScheme, .dark)
     }
-
-    // MARK: - Name / Metadata
 
     private func nameMetadataSection(for wp: WallpaperItem) -> some View {
         VStack(alignment: .leading, spacing: 3) {
@@ -124,8 +102,9 @@ struct WallpaperPreviewView: View {
                         .foregroundStyle(Color.wmBackground)
                         .padding(.horizontal, 10)
                         .padding(.vertical, 4)
-                        .background(Color.white, in: Capsule())
+                        .background(Color.white.opacity(0.96), in: Capsule())
                         .buttonStyle(.plain)
+                        .handCursor()
                 }
             } else {
                 HStack(spacing: 7) {
@@ -143,6 +122,7 @@ struct WallpaperPreviewView: View {
                             .foregroundStyle(Color.white.opacity(0.35))
                     }
                     .buttonStyle(.plain)
+                    .handCursor()
                     .help("Rename")
 
                     if viewModel.activeWallpaperID == wp.id {
@@ -154,7 +134,6 @@ struct WallpaperPreviewView: View {
                 }
             }
 
-            // Metadata row
             HStack(spacing: 12) {
                 if !fileSize.isEmpty {
                     metaLabel(fileSize, icon: "doc")
@@ -175,8 +154,6 @@ struct WallpaperPreviewView: View {
         .foregroundStyle(Color.white.opacity(0.45))
     }
 
-    // MARK: - Apply Button
-
     private func applyButton(for wp: WallpaperItem) -> some View {
         let isApplied = viewModel.activeWallpaperID == wp.id
         return Button {
@@ -194,9 +171,8 @@ struct WallpaperPreviewView: View {
         }
         .buttonStyle(.plain)
         .disabled(isApplied)
+        .handCursor()
     }
-
-    // MARK: - Icon Button Helper
 
     private func hudIconButton(_ icon: String, action: @escaping () -> Void) -> some View {
         Button(action: action) {
@@ -204,81 +180,48 @@ struct WallpaperPreviewView: View {
                 .font(.system(size: 14))
                 .foregroundStyle(Color.white.opacity(0.70))
                 .frame(width: 36, height: 36)
-                .background(Color.white.opacity(0.10), in: RoundedRectangle(cornerRadius: 9))
+                .glassButton(cornerRadius: 9)
         }
         .buttonStyle(.plain)
+        .handCursor()
     }
-
-    // MARK: - Rename
 
     private func commitRename(for wp: WallpaperItem) {
         viewModel.renameWallpaper(id: wp.id, to: renameText)
         isRenaming = false
     }
 
-    // MARK: - Metadata Loading
-
     private func loadMetadata() async {
+        let currentWallpaperID = wallpaper?.id
+        fileSize = ""
+        duration = ""
+
         guard let wp = wallpaper else { return }
         let url = wp.videoURL(in: AppDirectories.wallpapers)
+        var nextFileSize = ""
+        var nextDuration = ""
 
-        // File size
         if let attrs = try? FileManager.default.attributesOfItem(atPath: url.path),
            let bytes = attrs[.size] as? Int64 {
             let mb = Double(bytes) / 1_000_000
-            fileSize = mb >= 1000
+            nextFileSize = mb >= 1000
                 ? String(format: "%.1f GB", mb / 1000)
                 : String(format: "%.0f MB", mb)
         }
 
-        // Duration
         let asset = AVURLAsset(url: url)
         if let dur = try? await asset.load(.duration) {
             let secs = max(0, Int(CMTimeGetSeconds(dur)))
-            duration = secs >= 60
+            nextDuration = secs >= 60
                 ? String(format: "%d:%02d", secs / 60, secs % 60)
                 : "\(secs)s"
         }
-    }
-}
 
-// MARK: - Screen Saver Popover
-
-struct ScreenSaverPopoverView: View {
-    @ObservedObject var viewModel: WallmoveViewModel
-
-    var body: some View {
-        VStack(alignment: .leading, spacing: 16) {
-            Text("Screen Saver")
-                .font(.headline)
-
-            Picker("Mode", selection: $viewModel.selectedScreenSaverMode) {
-                ForEach(WallpaperLibrary.ScreenSaverMode.allCases) { mode in
-                    Text(mode.title).tag(mode)
-                }
-            }
-            .pickerStyle(.segmented)
-            .labelsHidden()
-
-            if viewModel.selectedScreenSaverMode == .separate {
-                Picker("Wallpaper", selection: Binding(
-                    get: { viewModel.selectedScreenSaverWallpaperID },
-                    set: { viewModel.selectedScreenSaverWallpaperID = $0 }
-                )) {
-                    ForEach(viewModel.wallpapers) { w in
-                        Text(w.displayName).tag(Optional(w.id))
-                    }
-                }
-                .labelsHidden()
-            }
-
-            Button("Apply") {
-                viewModel.applyScreenSaverSettings()
-            }
-            .buttonStyle(.borderedProminent)
-            .frame(maxWidth: .infinity)
+        guard wallpaper?.id == currentWallpaperID else {
+            return
         }
-        .padding(18)
-        .frame(width: 300)
+
+        fileSize = nextFileSize
+        duration = nextDuration
     }
 }

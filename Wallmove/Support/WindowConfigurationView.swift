@@ -22,6 +22,7 @@ struct WindowConfigurationView: NSViewRepresentable {
 
     final class Coordinator: NSObject, NSWindowDelegate {
         private weak var window: NSWindow?
+        private var hasPresentedInitialWindow = false
 
         func configureWindowIfNeeded(for view: NSView) {
             guard let window = view.window else { return }
@@ -55,6 +56,8 @@ struct WindowConfigurationView: NSViewRepresentable {
             window.isOpaque = false
             window.hasShadow = true
             window.isReleasedWhenClosed = false
+            window.isRestorable = false
+            window.tabbingMode = .disallowed
 
             if let themeFrame = window.contentView?.superview {
                 themeFrame.wantsLayer = true
@@ -76,6 +79,13 @@ struct WindowConfigurationView: NSViewRepresentable {
                 frame.size = fixedFrameSize
                 window.setFrame(frame, display: true)
             }
+
+            centerWindowIfNeeded(window, fixedFrameSize: fixedFrameSize)
+
+            if !hasPresentedInitialWindow {
+                hasPresentedInitialWindow = true
+                DashboardLauncher.showDashboard()
+            }
         }
 
         func windowWillResize(_ sender: NSWindow, to frameSize: NSSize) -> NSSize {
@@ -84,6 +94,32 @@ struct WindowConfigurationView: NSViewRepresentable {
 
         func windowShouldZoom(_ window: NSWindow, toFrame newFrame: NSRect) -> Bool {
             false
+        }
+
+        private func centerWindowIfNeeded(_ window: NSWindow, fixedFrameSize: NSSize) {
+            guard let screen = window.screen ?? NSScreen.main ?? NSScreen.screens.first else { return }
+
+            let visibleFrame = screen.visibleFrame.insetBy(dx: 20, dy: 20)
+            let centeredOrigin = CGPoint(
+                x: visibleFrame.midX - (fixedFrameSize.width / 2),
+                y: visibleFrame.midY - (fixedFrameSize.height / 2)
+            )
+
+            var frame = window.frame
+            let maxX = visibleFrame.maxX - fixedFrameSize.width
+            let maxY = visibleFrame.maxY - fixedFrameSize.height
+
+            let isOutOfBounds =
+                frame.origin.x < visibleFrame.minX ||
+                frame.origin.x > maxX ||
+                frame.origin.y < visibleFrame.minY ||
+                frame.origin.y > maxY
+
+            if isOutOfBounds {
+                frame.origin.x = centeredOrigin.x
+                frame.origin.y = centeredOrigin.y
+                window.setFrame(frame, display: true)
+            }
         }
     }
 }

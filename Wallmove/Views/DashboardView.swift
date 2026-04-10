@@ -4,10 +4,14 @@ import SwiftUI
 // MARK: - Window Metrics
 
 enum DashboardWindowMetrics {
-    static let defaultSize = CGSize(width: 1320, height: 900)
+    static let defaultSize = CGSize(width: 1240, height: 780)
     // Fixed-size window — min/max handled in WindowConfigurationView
     static let minimumSize = defaultSize
     static let maximumSize = defaultSize
+    static let contentWidth: CGFloat = 1120
+    static let horizontalPadding: CGFloat = 24
+    static let topInset: CGFloat = 88
+    static let bottomInset: CGFloat = 24
 }
 
 // MARK: - Navigation

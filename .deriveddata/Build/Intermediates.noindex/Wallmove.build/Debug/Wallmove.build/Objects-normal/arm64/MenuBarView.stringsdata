@@ -7,7 +7,7 @@
         "key": "Open Dashboard",
         "location": {
           "startingColumn": 20,
-          "startingLine": 8
+          "startingLine": 9
         }
       },
       {
@@ -15,7 +15,7 @@
         "key": "Launch at Login",
         "location": {
           "startingColumn": 17,
-          "startingLine": 16
+          "startingLine": 17
         }
       },
       {
@@ -23,7 +23,7 @@
         "key": "Quit Wallmove",
         "location": {
           "startingColumn": 20,
-          "startingLine": 29
+          "startingLine": 30
         }
       },
       {
@@ -31,7 +31,7 @@
         "key": "Status",
         "location": {
           "startingColumn": 18,
-          "startingLine": 41
+          "startingLine": 48
         }
       },
       {
@@ -39,7 +39,7 @@
         "key": "No desktop wallpaper set",
         "location": {
           "startingColumn": 22,
-          "startingLine": 55
+          "startingLine": 62
         }
       },
       {
@@ -47,7 +47,7 @@
         "key": "%lld wallpaper%@ imported",
         "location": {
           "startingColumn": 18,
-          "startingLine": 60
+          "startingLine": 67
         }
       }
     ]

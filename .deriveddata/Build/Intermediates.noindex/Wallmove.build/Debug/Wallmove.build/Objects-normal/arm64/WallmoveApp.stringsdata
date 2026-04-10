@@ -6,7 +6,7 @@
         "comment": "",
         "key": "Wallmove",
         "location": {
-          "startingColumn": 16,
+          "startingColumn": 21,
           "startingLine": 10
         }
       },
@@ -15,7 +15,7 @@
         "key": "Wallmove",
         "location": {
           "startingColumn": 22,
-          "startingLine": 30
+          "startingLine": 33
         }
       }
     ]

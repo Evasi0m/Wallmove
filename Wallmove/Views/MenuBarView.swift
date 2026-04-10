@@ -1,12 +1,13 @@
 import SwiftUI
 
 struct MenuBarView: View {
+    @Environment(\.openWindow) private var openWindow
     @ObservedObject var viewModel: WallmoveViewModel
 
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
             Button("Open Dashboard") {
-                DashboardLauncher.showDashboard()
+                openDashboardWindow()
             }
             .handCursor()
 
@@ -33,6 +34,12 @@ struct MenuBarView: View {
         }
         .padding(10)
         .frame(minWidth: 240)
+        .onAppear {
+            DashboardLauncher.openDashboard = {
+                openWindow(id: SceneID.dashboard)
+                NSApp.activate(ignoringOtherApps: true)
+            }
+        }
     }
 
     @ViewBuilder
@@ -61,5 +68,13 @@ struct MenuBarView: View {
                 .font(.caption)
                 .foregroundStyle(.secondary)
         }
+    }
+
+    private func openDashboardWindow() {
+        DashboardLauncher.openDashboard = {
+            openWindow(id: SceneID.dashboard)
+            NSApp.activate(ignoringOtherApps: true)
+        }
+        DashboardLauncher.showDashboard()
     }
 }

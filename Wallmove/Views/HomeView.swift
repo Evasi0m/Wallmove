@@ -9,13 +9,15 @@ struct HomeView: View {
     @FocusState private var isHomeFocused: Bool
 
     var body: some View {
-        ZStack {
-            Color.black.ignoresSafeArea()
+        GeometryReader { proxy in
+            ZStack {
+                Color.black.ignoresSafeArea()
 
-            if viewModel.wallpapers.isEmpty {
-                emptyState
-            } else {
-                heroContent
+                if viewModel.wallpapers.isEmpty {
+                    emptyState
+                } else {
+                    heroContent(in: proxy.size)
+                }
             }
         }
         .focusable()
@@ -31,8 +33,14 @@ struct HomeView: View {
         }
     }
 
-    private var heroContent: some View {
-        ZStack(alignment: .bottom) {
+    private func heroContent(in size: CGSize) -> some View {
+        let contentWidth = min(
+            DashboardWindowMetrics.contentWidth,
+            max(880, size.width - (DashboardWindowMetrics.horizontalPadding * 2))
+        )
+        let usesCompactHeroLayout = contentWidth < 1040
+
+        return ZStack(alignment: .bottom) {
             LoopingVideoView(
                 playerController: viewModel.previewController,
                 videoGravity: .resizeAspectFill
@@ -45,21 +53,32 @@ struct HomeView: View {
                 .opacity(previewFadeOpacity)
                 .ignoresSafeArea()
 
-            VStack(spacing: 18) {
-                Spacer(minLength: 150)
+            VStack(spacing: 16) {
+                Spacer(minLength: 118)
 
                 if let wallpaper = viewModel.selectedWallpaper {
-                    HStack(alignment: .bottom, spacing: 18) {
-                        heroStoryCard(for: wallpaper)
-                        statusCard
+                    Group {
+                        if usesCompactHeroLayout {
+                            VStack(spacing: 16) {
+                                heroStoryCard(for: wallpaper)
+                                statusCard
+                            }
+                        } else {
+                            HStack(alignment: .bottom, spacing: 16) {
+                                heroStoryCard(for: wallpaper)
+                                statusCard
+                            }
+                        }
                     }
-                    .padding(.horizontal, 28)
+                    .frame(maxWidth: contentWidth, alignment: .leading)
                 }
 
                 thumbnailDeck
-                    .padding(.horizontal, 28)
-                    .padding(.bottom, 28)
+                    .frame(maxWidth: contentWidth)
+                    .padding(.bottom, DashboardWindowMetrics.bottomInset)
             }
+            .padding(.horizontal, DashboardWindowMetrics.horizontalPadding)
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
         }
     }
 
@@ -97,12 +116,12 @@ struct HomeView: View {
                     .textCase(.uppercase)
 
                 Text(wp.displayName)
-                    .font(.system(size: 34, weight: .bold))
+                    .font(.system(size: 30, weight: .bold))
                     .foregroundStyle(.white)
                     .lineLimit(2)
 
                 Text("Imported \(wp.importedAt.formatted(date: .abbreviated, time: .omitted)) and stored locally inside Wallmove so the live wallpaper keeps working even if the original file is removed.")
-                    .font(.system(size: 14))
+                    .font(.system(size: 13))
                     .foregroundStyle(Color.white.opacity(0.72))
                     .fixedSize(horizontal: false, vertical: true)
             }
@@ -132,7 +151,7 @@ struct HomeView: View {
                     }
                     .buttonStyle(.bordered)
                     .tint(.white)
-                    .controlSize(.large)
+                    .controlSize(.regular)
                     .handCursor()
                 } else {
                     Label("Active on Desktop", systemImage: "checkmark.circle.fill")
@@ -145,8 +164,8 @@ struct HomeView: View {
             }
         }
         .frame(maxWidth: .infinity, alignment: .leading)
-        .padding(24)
-        .glassCard(cornerRadius: 30)
+        .padding(22)
+        .glassCard(cornerRadius: 28)
     }
 
     private var statusCard: some View {
@@ -173,9 +192,9 @@ struct HomeView: View {
                 )
             }
         }
-        .frame(width: 308, alignment: .leading)
-        .padding(22)
-        .glassCard(cornerRadius: 30)
+        .frame(width: 246, alignment: .leading)
+        .padding(20)
+        .glassCard(cornerRadius: 28)
     }
 
     private var thumbnailDeck: some View {
@@ -206,7 +225,8 @@ struct HomeView: View {
                 .padding(.vertical, 4)
             }
         }
-        .padding(18)
+        .padding(16)
+        .frame(maxWidth: .infinity)
         .glassCard(cornerRadius: 28)
     }
 
@@ -259,7 +279,7 @@ struct HomeView: View {
                 .padding(.horizontal, 12)
                 .padding(.bottom, 10)
             }
-            .frame(width: 170, height: 100)
+            .frame(width: 156, height: 92)
             .clipShape(RoundedRectangle(cornerRadius: 18))
             .shadow(
                 color: isSelected ? Color.white.opacity(0.34) : .clear,

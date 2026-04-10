@@ -7,7 +7,7 @@
         "key": "Settings",
         "location": {
           "startingColumn": 18,
-          "startingLine": 35
+          "startingLine": 37
         }
       },
       {
@@ -15,7 +15,7 @@
         "key": "Tune how Wallmove behaves on login, local storage, and the live desktop wallpaper engine.",
         "location": {
           "startingColumn": 18,
-          "startingLine": 39
+          "startingLine": 41
         }
       },
       {
@@ -23,7 +23,7 @@
         "key": "",
         "location": {
           "startingColumn": 24,
-          "startingLine": 65
+          "startingLine": 67
         }
       },
       {
@@ -31,7 +31,7 @@
         "key": "Launch at Login",
         "location": {
           "startingColumn": 26,
-          "startingLine": 53
+          "startingLine": 55
         }
       },
       {
@@ -39,7 +39,7 @@
         "key": "Choose or change your live wallpaper from Home or Library. Settings here stay focused on system behavior and storage.",
         "location": {
           "startingColumn": 22,
-          "startingLine": 84
+          "startingLine": 86
         }
       },
       {
@@ -47,7 +47,7 @@
         "key": "Deleting the original imported file will not break the wallpaper because Wallmove plays the copy stored in Application Support.",
         "location": {
           "startingColumn": 22,
-          "startingLine": 120
+          "startingLine": 122
         }
       },
       {
@@ -55,7 +55,7 @@
         "key": "Clear Cache",
         "location": {
           "startingColumn": 28,
-          "startingLine": 111
+          "startingLine": 113
         }
       },
       {
@@ -63,7 +63,7 @@
         "key": "Imported Cache",
         "location": {
           "startingColumn": 30,
-          "startingLine": 100
+          "startingLine": 102
         }
       }
     ]

@@ -23,9 +23,11 @@ struct LibraryView: View {
                         wallpaperGrid
                     }
                 }
-                .padding(.horizontal, 28)
-                .padding(.top, 104)
-                .padding(.bottom, 28)
+                .frame(maxWidth: DashboardWindowMetrics.contentWidth, alignment: .leading)
+                .padding(.horizontal, DashboardWindowMetrics.horizontalPadding)
+                .padding(.top, DashboardWindowMetrics.topInset)
+                .padding(.bottom, DashboardWindowMetrics.bottomInset)
+                .frame(maxWidth: .infinity)
             }
         }
         .onDrop(of: [.fileURL], isTargeted: $isDragTargeted) { providers in
@@ -45,7 +47,7 @@ struct LibraryView: View {
     }
 
     private var headerDeck: some View {
-        HStack(spacing: 16) {
+        HStack(alignment: .top, spacing: 16) {
             VStack(alignment: .leading, spacing: 8) {
                 Text("Library")
                     .font(.system(size: 34, weight: .bold))

@@ -7,21 +7,20 @@ struct AppToolbar: View {
     @State private var isImportHovering = false
 
     var body: some View {
-        HStack(alignment: .center, spacing: 18) {
-            brandChip
-
-            Spacer(minLength: 18)
+        ZStack {
+            HStack {
+                brandChip
+                Spacer()
+                importButton
+            }
 
             navigationChip
-
-            Spacer(minLength: 18)
-
-            importButton
         }
-        .padding(.leading, 92)
-        .padding(.trailing, 28)
-        .padding(.top, 22)
-        .padding(.bottom, 6)
+        .frame(maxWidth: DashboardWindowMetrics.contentWidth)
+        .padding(.leading, 86)
+        .padding(.trailing, DashboardWindowMetrics.horizontalPadding)
+        .padding(.top, 18)
+        .padding(.bottom, 8)
     }
 
     private var brandChip: some View {
@@ -33,7 +32,7 @@ struct AppToolbar: View {
         }
         .foregroundStyle(.white)
         .padding(.horizontal, 16)
-        .padding(.vertical, 12)
+        .padding(.vertical, 10)
         .glassCard(cornerRadius: 22)
     }
 
@@ -66,7 +65,7 @@ struct AppToolbar: View {
                 .handCursor()
             }
         }
-        .padding(5)
+        .padding(4)
         .glassCard(cornerRadius: 24)
     }
 
@@ -84,13 +83,13 @@ struct AppToolbar: View {
                     .fixedSize()
                     .opacity(isImportHovering ? 1 : 0)
                     .blur(radius: isImportHovering ? 0 : 3)
-                    .frame(width: isImportHovering ? 126 : 0, alignment: .leading)
+                    .frame(width: isImportHovering ? 118 : 0, alignment: .leading)
                     .clipped()
             }
             .foregroundStyle(.white)
-            .padding(.leading, 14)
-            .padding(.trailing, isImportHovering ? 18 : 14)
-            .padding(.vertical, 12)
+            .padding(.leading, 13)
+            .padding(.trailing, isImportHovering ? 16 : 13)
+            .padding(.vertical, 10)
             .glassCard(cornerRadius: 22)
             .contentShape(Capsule())
             .animation(

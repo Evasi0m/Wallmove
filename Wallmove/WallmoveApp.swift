@@ -7,7 +7,7 @@ struct WallmoveApp: App {
     @State private var showsMenuBarExtra = true
 
     var body: some Scene {
-        Window("Wallmove", id: SceneID.dashboard) {
+        WindowGroup("Wallmove", id: SceneID.dashboard) {
             DashboardView(viewModel: viewModel)
                 .frame(
                     width: DashboardWindowMetrics.defaultSize.width,
@@ -26,6 +26,9 @@ struct WallmoveApp: App {
         )
         .windowResizability(.contentSize)
         .windowStyle(.hiddenTitleBar)
+        .commands {
+            CommandGroup(replacing: .newItem) { }
+        }
 
         MenuBarExtra("Wallmove", systemImage: "play.rectangle.on.rectangle", isInserted: $showsMenuBarExtra) {
             MenuBarView(viewModel: viewModel)

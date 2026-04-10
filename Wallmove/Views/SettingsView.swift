@@ -23,9 +23,11 @@ struct SettingsView: View {
                         aboutCard
                     }
                 }
-                .padding(.horizontal, 28)
-                .padding(.top, 104)
-                .padding(.bottom, 28)
+                .frame(maxWidth: DashboardWindowMetrics.contentWidth, alignment: .leading)
+                .padding(.horizontal, DashboardWindowMetrics.horizontalPadding)
+                .padding(.top, DashboardWindowMetrics.topInset)
+                .padding(.bottom, DashboardWindowMetrics.bottomInset)
+                .frame(maxWidth: .infinity)
             }
         }
     }

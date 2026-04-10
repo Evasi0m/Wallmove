@@ -7,7 +7,7 @@
         "key": "Library",
         "location": {
           "startingColumn": 22,
-          "startingLine": 50
+          "startingLine": 52
         }
       },
       {
@@ -15,7 +15,7 @@
         "key": "Your imported clips live here. Drag videos into the window or open a wallpaper to preview, apply, rename, or delete it.",
         "location": {
           "startingColumn": 22,
-          "startingLine": 54
+          "startingLine": 56
         }
       },
       {
@@ -23,7 +23,7 @@
         "key": "Imported Wallpapers",
         "location": {
           "startingColumn": 22,
-          "startingLine": 74
+          "startingLine": 76
         }
       },
       {
@@ -31,7 +31,7 @@
         "key": "Click any card to open the immersive preview.",
         "location": {
           "startingColumn": 22,
-          "startingLine": 80
+          "startingLine": 82
         }
       },
       {
@@ -39,7 +39,7 @@
         "key": "Import Videos",
         "location": {
           "startingColumn": 20,
-          "startingLine": 124
+          "startingLine": 126
         }
       },
       {
@@ -47,7 +47,7 @@
         "key": "Your Library is Empty",
         "location": {
           "startingColumn": 22,
-          "startingLine": 114
+          "startingLine": 116
         }
       },
       {
@@ -55,7 +55,7 @@
         "key": "Import .mp4 or .mov files, or drag and drop them here.",
         "location": {
           "startingColumn": 22,
-          "startingLine": 118
+          "startingLine": 120
         }
       }
     ]

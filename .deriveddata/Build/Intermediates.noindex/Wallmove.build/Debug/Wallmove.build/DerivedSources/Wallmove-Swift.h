@@ -371,9 +371,11 @@ extern "C" {
 
 #if defined(__OBJC__)
 
+@class NSNotification;
 @class NSApplication;
 SWIFT_CLASS("_TtC8Wallmove11AppDelegate")
 @interface AppDelegate : NSObject <NSApplicationDelegate>
+- (void)applicationDidFinishLaunching:(NSNotification * _Nonnull)notification;
 - (BOOL)applicationShouldHandleReopen:(NSApplication * _Nonnull)sender hasVisibleWindows:(BOOL)flag SWIFT_WARN_UNUSED_RESULT;
 - (nonnull instancetype)init OBJC_DESIGNATED_INITIALIZER;
 @end

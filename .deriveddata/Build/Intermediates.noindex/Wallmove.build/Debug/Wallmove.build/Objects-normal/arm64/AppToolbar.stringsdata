@@ -7,7 +7,7 @@
         "key": "Import Videos",
         "location": {
           "startingColumn": 15,
-          "startingLine": 103
+          "startingLine": 102
         }
       },
       {
@@ -15,7 +15,7 @@
         "key": "Wallmove",
         "location": {
           "startingColumn": 18,
-          "startingLine": 31
+          "startingLine": 30
         }
       },
       {
@@ -23,7 +23,7 @@
         "key": "Import Wallpaper",
         "location": {
           "startingColumn": 22,
-          "startingLine": 81
+          "startingLine": 80
         }
       }
     ]

@@ -70,18 +70,22 @@ struct WallpaperPreviewView: View {
                 .padding(.horizontal, 14)
 
             nameMetadataSection(for: wp)
+                .layoutPriority(-1)
 
             Spacer(minLength: 12)
 
-            hudIconButton("trash") {
-                showDeleteConfirmation = true
-            }
-            .padding(.trailing, 12)
+            HStack(spacing: 12) {
+                hudIconButton("trash") {
+                    showDeleteConfirmation = true
+                }
 
-            applyButton(for: wp)
+                applyButton(for: wp)
+            }
+            .layoutPriority(1)
         }
         .padding(.horizontal, 18)
         .padding(.vertical, 12)
+        .frame(maxWidth: DashboardWindowMetrics.contentWidth)
         .glassCard(cornerRadius: 20)
         .environment(\.colorScheme, .dark)
     }
@@ -94,7 +98,7 @@ struct WallpaperPreviewView: View {
                         .font(.system(size: 14, weight: .semibold))
                         .foregroundStyle(.white)
                         .textFieldStyle(.plain)
-                        .frame(maxWidth: 200)
+                        .frame(minWidth: 100, maxWidth: 260)
                         .onSubmit { commitRename(for: wp) }
 
                     Button("Done") { commitRename(for: wp) }
@@ -112,6 +116,7 @@ struct WallpaperPreviewView: View {
                         .font(.system(size: 14, weight: .semibold))
                         .foregroundStyle(.white)
                         .lineLimit(1)
+                        .truncationMode(.tail)
 
                     Button {
                         renameText = wp.displayName

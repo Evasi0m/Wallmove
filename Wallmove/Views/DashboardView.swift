@@ -108,7 +108,6 @@ struct DashboardView: View {
             HomeView(viewModel: viewModel, onOpenPreview: openPreview)
                 .id(viewModel.previewSurfaceID)
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
-                .ignoresSafeArea()
         case .library:
             LibraryView(viewModel: viewModel, onWallpaperTap: { id in
                 viewModel.selectWallpaper(id: id)

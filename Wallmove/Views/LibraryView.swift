@@ -7,7 +7,7 @@ struct LibraryView: View {
 
     @State private var isDragTargeted = false
 
-    private let columns = [GridItem(.adaptive(minimum: 220, maximum: 220), spacing: 12, alignment: .top)]
+    private let columns = [GridItem(.adaptive(minimum: 200, maximum: 280), spacing: 14, alignment: .top)]
 
     var body: some View {
         ZStack {
@@ -84,7 +84,7 @@ struct LibraryView: View {
                     .foregroundStyle(Color.white.opacity(0.58))
             }
 
-            LazyVGrid(columns: columns, spacing: 12) {
+            LazyVGrid(columns: columns, spacing: 14) {
                 ForEach(viewModel.wallpapers) { wallpaper in
                     Button {
                         onWallpaperTap(wallpaper.id)
@@ -133,9 +133,6 @@ struct LibraryView: View {
         .frame(maxWidth: .infinity)
         .padding(.vertical, 40)
         .glassCard(cornerRadius: 30)
-        .onDrop(of: [.fileURL], isTargeted: $isDragTargeted) { providers in
-            handleDrop(providers)
-        }
     }
 
     private func metricCard(title: String, value: String, icon: String) -> some View {
@@ -148,10 +145,10 @@ struct LibraryView: View {
                 .font(.system(size: 16, weight: .semibold))
                 .foregroundStyle(.white)
                 .lineLimit(2)
-                .frame(maxWidth: 220, alignment: .leading)
+                .truncationMode(.tail)
         }
         .padding(18)
-        .frame(minWidth: 180, alignment: .leading)
+        .frame(minWidth: 160, maxWidth: 240, alignment: .leading)
         .glassCard(cornerRadius: 24)
     }
 

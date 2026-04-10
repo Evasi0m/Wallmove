@@ -158,9 +158,11 @@ struct SettingsView: View {
             }
 
             content()
+
+            Spacer(minLength: 0)
         }
         .padding(22)
-        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+        .frame(maxWidth: .infinity, alignment: .topLeading)
         .glassCard(cornerRadius: 30)
     }
 

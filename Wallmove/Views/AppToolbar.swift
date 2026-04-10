@@ -7,17 +7,19 @@ struct AppToolbar: View {
     @State private var isImportHovering = false
 
     var body: some View {
-        ZStack {
-            HStack {
-                brandChip
-                Spacer()
-                importButton
-            }
+        HStack(spacing: 0) {
+            brandChip
+
+            Spacer(minLength: 8)
 
             navigationChip
+
+            Spacer(minLength: 8)
+
+            importButton
         }
         .frame(maxWidth: DashboardWindowMetrics.contentWidth)
-        .padding(.leading, 86)
+        .padding(.leading, 76)
         .padding(.trailing, DashboardWindowMetrics.horizontalPadding)
         .padding(.top, 18)
         .padding(.bottom, 8)
@@ -83,7 +85,7 @@ struct AppToolbar: View {
                     .fixedSize()
                     .opacity(isImportHovering ? 1 : 0)
                     .blur(radius: isImportHovering ? 0 : 3)
-                    .frame(width: isImportHovering ? 118 : 0, alignment: .leading)
+                    .frame(width: isImportHovering ? nil : 0, alignment: .leading)
                     .clipped()
             }
             .foregroundStyle(.white)

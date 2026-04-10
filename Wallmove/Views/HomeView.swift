@@ -54,7 +54,7 @@ struct HomeView: View {
                 .ignoresSafeArea()
 
             VStack(spacing: 16) {
-                Spacer(minLength: 118)
+                Spacer(minLength: DashboardWindowMetrics.topInset + 8)
 
                 if let wallpaper = viewModel.selectedWallpaper {
                     Group {
@@ -62,6 +62,7 @@ struct HomeView: View {
                             VStack(spacing: 16) {
                                 heroStoryCard(for: wallpaper)
                                 statusCard
+                                    .frame(maxWidth: .infinity, alignment: .leading)
                             }
                         } else {
                             HStack(alignment: .bottom, spacing: 16) {
@@ -192,7 +193,7 @@ struct HomeView: View {
                 )
             }
         }
-        .frame(width: 246, alignment: .leading)
+        .frame(minWidth: 220, idealWidth: 246, alignment: .leading)
         .padding(20)
         .glassCard(cornerRadius: 28)
     }
@@ -222,6 +223,7 @@ struct HomeView: View {
                         stripCard(wallpaper)
                     }
                 }
+                .padding(.horizontal, 4)
                 .padding(.vertical, 4)
             }
         }

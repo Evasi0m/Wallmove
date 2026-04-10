@@ -10,6 +10,7 @@ struct WallpaperThumbnailCard: View {
         ZStack(alignment: .bottomLeading) {
             thumbnailImage
                 .aspectRatio(16 / 9, contentMode: .fill)
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .clipped()
                 .overlay {
                     LinearGradient(
@@ -47,6 +48,7 @@ struct WallpaperThumbnailCard: View {
         }
         .frame(maxWidth: .infinity)
         .frame(height: 156)
+        .contentShape(RoundedRectangle(cornerRadius: 22))
         .clipShape(RoundedRectangle(cornerRadius: 22))
         .overlay(
             RoundedRectangle(cornerRadius: 22)
